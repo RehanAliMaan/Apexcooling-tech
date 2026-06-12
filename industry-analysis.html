@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX — The Cooling Challenge & Our Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #0A1628;
+  --navy2:  #0D2B55;
+  --red:    #CC1100;
+  --orange: #FF4D00;
+  --green:  #3ECF82;
+  --blue:   #5BA8E8;
+  --ice:    #A8D4F5;
+  --cream:  #EDD9A3;
+  --white:  #F4F8FF;
+  --gray:   #8A9BB0;
+  --ltgray: #A8BCCF;
+  --yellow: #FFD600;
+  --hotred: #FF4444;
+  --gold:   #C8A86A;
+  --mono:   'JetBrains Mono', monospace;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--navy);
+  font-family: 'Barlow', sans-serif;
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--red); }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  background: rgba(6,14,26,0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(204,17,0,0.2);
+  padding: 0 48px; height:58px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+
+.nav-logo {
+  display:flex; align-items:center; gap:10px;
+  text-decoration:none;
+}
+
+.nav-heart {
+  width:32px; height:32px;
+}
+
+.nav-brand {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:18px; letter-spacing:3px; color:var(--white);
+}
+.nav-brand span { color:var(--red); }
+
+.nav-right {
+  display:flex; align-items:center; gap:24px;
+}
+
+.nav-right a {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--gray); text-decoration:none; transition:color 0.2s;
+}
+.nav-right a:hover { color:var(--white); }
+
+.nav-cta {
+  background:var(--red) !important; color:var(--white) !important;
+  padding:7px 18px; border-radius:3px;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:100px 48px 80px;
+  position:relative; overflow:hidden;
+}
+
+.hero-grid {
+  position:absolute; inset:0; z-index:0;
+  background:
+    repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(168,212,245,0.02) 60px,rgba(168,212,245,0.02) 61px),
+    repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(168,212,245,0.02) 60px,rgba(168,212,245,0.02) 61px);
+}
+
+.hero-glow-r {
+  position:absolute; z-index:0;
+  width:800px; height:800px;
+  background:radial-gradient(circle,rgba(204,17,0,0.06) 0%,transparent 65%);
+  top:-200px; right:-150px;
+  animation:pulse 6s ease-in-out infinite;
+}
+.hero-glow-l {
+  position:absolute; z-index:0;
+  width:600px; height:600px;
+  background:radial-gradient(circle,rgba(27,95,168,0.05) 0%,transparent 65%);
+  bottom:-100px; left:-100px;
+  animation:pulse 8s ease-in-out infinite 2s;
+}
+
+@keyframes pulse {
+  0%,100%{opacity:0.5;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.06)}
+}
+
+.hero-content {
+  position:relative; z-index:2;
+  max-width:1000px; width:100%;
+  text-align:center;
+}
+
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(204,17,0,0.1);
+  border:1px solid rgba(204,17,0,0.3);
+  border-radius:3px; padding:5px 16px;
+  margin-bottom:28px;
+  animation:fadeUp 0.8s ease both;
+}
+.hero-dot {
+  width:7px;height:7px;border-radius:50%;
+  background:var(--red);
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-eyebrow span {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:3px;
+  text-transform:uppercase;color:var(--red);
+}
+
+.hero-headline {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(48px,8vw,96px);
+  line-height:0.9; letter-spacing:2px;
+  color:var(--white); margin-bottom:12px;
+  animation:fadeUp 0.8s ease 0.1s both;
+}
+.hero-headline em {
+  color:var(--orange); font-style:normal; display:block;
+}
+
+.hero-sub {
+  font-size:clamp(15px,2vw,19px);
+  font-weight:300; color:var(--ice);
+  max-width:680px; margin:0 auto 48px;
+  line-height:1.65; letter-spacing:0.3px;
+  animation:fadeUp 0.8s ease 0.2s both;
+}
+
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── VS SECTION ── */
+.vs-section {
+  padding:100px 48px;
+  background:#060E1A;
+  position:relative;
+}
+.vs-section::before {
+  content:''; position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+}
+
+.section-label {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:4px;
+  text-transform:uppercase;color:var(--red);
+  text-align:center;margin-bottom:10px;
+}
+.section-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(32px,5vw,52px);
+  text-align:center;margin-bottom:12px;line-height:1;
+}
+.section-sub {
+  font-size:15px;font-weight:300;color:var(--ice);
+  text-align:center;max-width:600px;
+  margin:0 auto 64px;line-height:1.7;
+}
+
+.vs-grid {
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:0; max-width:1100px; margin:0 auto;
+  align-items:start;
+}
+
+.vs-col {
+  border-radius:12px; overflow:hidden;
+  border:1px solid rgba(168,212,245,0.1);
+}
+
+.vs-col-header {
+  padding:24px 28px 20px;
+  border-bottom:1px solid rgba(168,212,245,0.08);
+}
+
+.vs-tag {
+  display:inline-block;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase; padding:3px 10px;
+  border-radius:2px; margin-bottom:10px;
+}
+
+.vs-col-name {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;letter-spacing:1px;margin-bottom:6px;
+}
+
+.vs-col-desc {
+  font-size:12px;color:var(--gray);line-height:1.5;
+}
+
+.vs-points {
+  padding:20px 28px;
+  display:flex;flex-direction:column;gap:10px;
+}
+
+.vs-point {
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:12.5px;line-height:1.5;
+}
+
+.vs-icon {
+  font-size:14px;flex-shrink:0;margin-top:1px;
+}
+
+.vs-warning {
+  margin:0 28px 20px;
+  padding:14px 16px;
+  border-radius:6px;
+  background:rgba(204,17,0,0.08);
+  border:1px solid rgba(204,17,0,0.25);
+}
+
+.vs-warning-title {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--red);
+  margin-bottom:8px;
+}
+
+.vs-warning-item {
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:11px;color:var(--ltgray);
+  line-height:1.5;margin-bottom:4px;
+}
+.vs-warning-item:last-child{margin-bottom:0}
+
+/* VS divider */
+.vs-divider {
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:0 24px;gap:16px;
+}
+
+.vs-circle {
+  width:64px;height:64px;border-radius:50%;
+  background:var(--navy);
+  border:2px solid rgba(168,212,245,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;color:var(--ltgray);
+  letter-spacing:1px;
+}
+
+.vs-arrow {
+  font-size:20px;color:rgba(168,212,245,0.2);
+}
+
+/* Industry going box */
+.industry-going {
+  max-width:1100px;margin:48px auto 0;
+  background:rgba(13,27,50,0.6);
+  border:1px solid rgba(255,215,0,0.2);
+  border-radius:12px;overflow:hidden;
+}
+
+.ig-header {
+  background:rgba(200,168,106,0.1);
+  border-bottom:1px solid rgba(255,215,0,0.15);
+  padding:18px 28px;
+  display:flex;align-items:center;gap:12px;
+}
+
+.ig-header-icon { font-size:20px; }
+
+.ig-header-text {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--yellow);
+}
+
+.ig-body {
+  padding:28px;
+  display:grid;grid-template-columns:1fr auto 1fr;
+  gap:24px;align-items:center;
+}
+
+.ig-col {
+  padding:20px;border-radius:8px;
+  text-align:center;
+}
+
+.ig-col-icon { font-size:28px;margin-bottom:10px;display:block; }
+
+.ig-col-name {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:6px;
+}
+
+.ig-col-desc {
+  font-size:11.5px;color:var(--gray);line-height:1.5;
+}
+
+.ig-plus {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:48px;color:var(--yellow);opacity:0.4;
+}
+
+/* ── APEX ANSWER SECTION ── */
+.answer-section {
+  padding:100px 48px;
+  background:var(--navy);
+  position:relative;
+}
+.answer-section::before {
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(168,212,245,0.2),transparent);
+}
+
+.answer-grid {
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:32px;max-width:1100px;margin:0 auto;
+}
+
+.answer-card {
+  background:rgba(13,27,50,0.5);
+  border:1px solid rgba(168,212,245,0.08);
+  border-radius:12px;padding:28px;
+  position:relative;overflow:hidden;
+  transition:border-color 0.3s,transform 0.3s;
+}
+.answer-card:hover {
+  border-color:rgba(204,17,0,0.4);
+  transform:translateY(-4px);
+}
+
+.answer-card::before {
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:3px;
+}
+
+.answer-card.l1::before{background:var(--green);}
+.answer-card.l2::before{background:var(--blue);}
+.answer-card.l3::before{background:var(--orange);}
+.answer-card.l4::before{background:#5B2D8E;}
+.answer-card.l5::before{background:#0A6B6B;}
+.answer-card.exec::before{background:var(--yellow);}
+
+.card-num {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:52px;line-height:1;
+  position:absolute;top:12px;right:16px;
+  opacity:0.12;
+}
+.l1 .card-num{color:var(--green);}
+.l2 .card-num{color:var(--blue);}
+.l3 .card-num{color:var(--orange);}
+.l4 .card-num{color:#5B2D8E;}
+.l5 .card-num{color:#0A6B6B;}
+.exec .card-num{color:var(--yellow);}
+
+.card-icon{font-size:26px;margin-bottom:14px;display:block;}
+.card-title {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--white);
+  margin-bottom:6px;
+}
+.card-warning {
+  font-size:10.5px;font-style:italic;color:var(--red);
+  margin-bottom:12px;font-family:'Barlow Condensed',sans-serif;
+  letter-spacing:1px;
+}
+.card-answer {
+  font-size:13px;color:var(--ltgray);line-height:1.65;
+}
+.card-answer strong{color:var(--white);}
+
+.card-specs {
+  margin-top:14px;padding-top:12px;
+  border-top:1px solid rgba(168,212,245,0.08);
+  display:flex;flex-direction:column;gap:4px;
+}
+.spec-line {
+  font-family:var(--mono);
+  font-size:10px;color:var(--gray);
+  display:flex;gap:6px;
+}
+.spec-line::before{content:'›';color:var(--red);flex-shrink:0;}
+
+/* ── EXECUTION CALLOUT ── */
+.execution-callout {
+  max-width:1100px;margin:32px auto 0;
+  background:linear-gradient(135deg,#0A1628 0%,#0D2B55 50%,#0A1628 100%);
+  border:1px solid rgba(255,215,0,0.25);
+  border-radius:12px;padding:40px 48px;
+  display:grid;grid-template-columns:1fr auto;
+  gap:32px;align-items:center;
+  position:relative;overflow:hidden;
+}
+
+.execution-callout::before {
+  content:'EXECUTION';
+  position:absolute;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:180px;color:rgba(255,215,0,0.03);
+  right:-10px;top:50%;transform:translateY(-50%);
+  letter-spacing:10px;pointer-events:none;
+}
+
+.exec-left {}
+.exec-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(24px,4vw,40px);
+  line-height:1;margin-bottom:12px;color:var(--white);
+}
+.exec-title em{color:var(--yellow);font-style:normal;}
+
+.exec-desc {
+  font-size:14px;color:var(--ice);
+  line-height:1.7;font-weight:300;
+  max-width:580px;
+}
+
+.exec-stats {
+  display:flex;flex-direction:column;gap:16px;
+  flex-shrink:0;
+}
+
+.exec-stat {
+  text-align:center;padding:16px 24px;
+  background:rgba(10,22,40,0.6);
+  border:1px solid rgba(168,212,245,0.12);
+  border-radius:8px;min-width:140px;
+}
+.exec-val {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:32px;line-height:1;margin-bottom:4px;display:block;
+}
+.exec-lbl {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:9px;font-weight:600;letter-spacing:2px;
+  text-transform:uppercase;color:var(--gray);
+}
+
+/* ── BOTTOM LINE SECTION ── */
+.bottom-line {
+  padding:100px 48px;
+  background:#060E1A;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.bottom-line::before {
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--orange),transparent);
+}
+
+.bl-bg-text {
+  position:absolute;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(80px,15vw,180px);
+  color:rgba(204,17,0,0.04);
+  left:50%;top:50%;transform:translate(-50%,-50%);
+  white-space:nowrap;letter-spacing:10px;pointer-events:none;
+  z-index:0;
+}
+
+.bl-content {position:relative;z-index:1;max-width:900px;margin:0 auto;}
+
+.bl-quote {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(18px,3vw,30px);
+  font-weight:300;font-style:italic;
+  color:var(--white);line-height:1.5;
+  margin-bottom:20px;
+}
+.bl-quote strong{color:var(--orange);font-style:normal;}
+
+.bl-attr {
+  font-size:12px;color:var(--gray);
+  letter-spacing:2px;margin-bottom:48px;
+}
+
+.bl-statement {
+  background:rgba(13,27,50,0.6);
+  border:1px solid rgba(204,17,0,0.25);
+  border-radius:8px;padding:28px 32px;
+  margin-bottom:40px;
+}
+
+.bl-statement-text {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(20px,3vw,32px);
+  line-height:1.2;color:var(--white);
+  margin-bottom:12px;
+}
+.bl-statement-text span{color:var(--red);}
+
+.bl-statement-sub {
+  font-size:13px;color:var(--ice);
+  line-height:1.6;font-weight:300;
+}
+
+/* CTA */
+.bl-cta {
+  display:flex;gap:16px;justify-content:center;flex-wrap:wrap;
+}
+
+.btn-red {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--white);
+  background:var(--red);padding:14px 28px;border-radius:3px;
+  text-decoration:none;transition:all 0.2s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-red:hover{background:#AA0E00;transform:translateY(-2px);}
+
+.btn-outline {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:600;letter-spacing:2px;
+  text-transform:uppercase;color:var(--ice);
+  background:transparent;
+  border:1px solid rgba(168,212,245,0.25);
+  padding:14px 28px;border-radius:3px;
+  text-decoration:none;transition:all 0.2s;
+}
+.btn-outline:hover{border-color:var(--ice);color:var(--white);}
+
+/* ── FOOTER ── */
+footer {
+  background:#040A12;
+  border-top:1px solid rgba(168,212,245,0.06);
+  padding:32px 48px;
+  display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:16px;
+}
+
+.footer-logo {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:3px;color:var(--white);
+}
+.footer-logo span{color:var(--red);}
+
+.footer-links {
+  display:flex;gap:24px;
+}
+.footer-links a {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--gray);text-decoration:none;transition:color 0.2s;
+}
+.footer-links a:hover{color:var(--white);}
+
+.footer-info {
+  font-size:11px;color:var(--gray);
+  text-align:right;line-height:1.8;
+}
+
+@media(max-width:900px){
+  nav{padding:0 24px;}
+  .vs-grid{grid-template-columns:1fr;gap:24px;}
+  .vs-divider{flex-direction:row;padding:24px 0;}
+  .answer-grid{grid-template-columns:1fr;}
+  .ig-body{grid-template-columns:1fr;text-align:center;}
+  .execution-callout{grid-template-columns:1fr;}
+  section{padding:60px 24px;}
+  .hero{padding:80px 24px 60px;}
+}
+
+/* ── PRINT / PDF STYLES ── */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  body {
+    background: #0A1628 !important;
+    color: #F4F8FF !important;
+  }
+
+  nav {
+    position: relative !important;
+    background: #060E1A !important;
+    border-bottom: 2px solid #CC1100 !important;
+  }
+
+  .hero {
+    min-height: auto !important;
+    padding: 60px 48px 60px !important;
+    background: #0A1628 !important;
+    break-after: page;
+  }
+
+  .hero-glow-r, .hero-glow-l { display:none !important; }
+
+  .vs-section {
+    background: #060E1A !important;
+    padding: 60px 48px !important;
+    break-after: page;
+  }
+
+  .vs-section::before {
+    background: #CC1100 !important;
+    height: 2px !important;
+  }
+
+  .vs-col {
+    break-inside: avoid !important;
+  }
+
+  .industry-going {
+    background: #0D2B55 !important;
+    border: 2px solid rgba(255,215,0,0.4) !important;
+    break-inside: avoid !important;
+  }
+
+  .ig-header {
+    background: rgba(200,168,106,0.2) !important;
+  }
+
+  .answer-section {
+    background: #0A1628 !important;
+    padding: 60px 48px !important;
+    break-after: page;
+  }
+
+  .answer-card {
+    background: rgba(13,27,50,0.9) !important;
+    break-inside: avoid !important;
+    border: 1px solid rgba(168,212,245,0.2) !important;
+  }
+
+  .answer-card.l1 { border-top: 3px solid #3ECF82 !important; }
+  .answer-card.l2 { border-top: 3px solid #5BA8E8 !important; }
+  .answer-card.l3 { border-top: 3px solid #FF4D00 !important; }
+  .answer-card.l4 { border-top: 3px solid #5B2D8E !important; }
+  .answer-card.l5 { border-top: 3px solid #0A6B6B !important; }
+  .answer-card.exec { border-top: 3px solid #FFD600 !important; }
+
+  .execution-callout {
+    background: #0D2B55 !important;
+    border: 2px solid rgba(255,215,0,0.3) !important;
+    break-inside: avoid !important;
+  }
+
+  .bottom-line {
+    background: #060E1A !important;
+    break-inside: avoid !important;
+  }
+
+  .bl-statement {
+    background: rgba(13,27,50,0.9) !important;
+    border: 2px solid rgba(204,17,0,0.4) !important;
+  }
+
+  .btn-red {
+    background: #CC1100 !important;
+    color: white !important;
+    border: 2px solid #CC1100 !important;
+  }
+
+  .btn-outline {
+    border: 2px solid rgba(168,212,245,0.4) !important;
+    color: #A8D4F5 !important;
+  }
+
+  footer {
+    background: #040A12 !important;
+    border-top: 1px solid rgba(168,212,245,0.15) !important;
+  }
+
+  /* Force page breaks between major sections */
+  .vs-warning { break-inside: avoid !important; }
+  .exec-stat { break-inside: avoid !important; }
+
+  /* Hide animations that don't print */
+  @keyframes pulse { 0%,100%{opacity:1} }
+  @keyframes blink { 0%,100%{opacity:1} }
+  @keyframes fadeUp { from{opacity:1;transform:none} }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(4,10,18,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(204,17,0,0.2);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#F4F8FF;"><span style="color:#CC1100;">APEX</span> COOLING</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+    <a href="index.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Home</a>
+    <a href="about.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">About</a>
+    <a href="solution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Solution</a>
+    <a href="why-apex.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Why APEX</a>
+    <a href="roi.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">ROI</a>
+    <a href="evolution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Evolution</a>
+    <a href="industry-analysis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Industry</a>
+    <a href="crisis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Crisis</a>
+    <a href="deployment-cover.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Deployment</a>
+    <a href="news.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">News</a>
+    <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Contact</a>
+    <a href="https://apexmechpod.com" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#F4F8FF;background:#CC1100;padding:8px 18px;border-radius:3px;text-decoration:none;">MechPod →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow-r"></div>
+  <div class="hero-glow-l"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-dot"></div>
+      <span>Industry Analysis  ·  APEX Cooling Technologies  ·  2026</span>
+    </div>
+
+    <h1 class="hero-headline">
+      Liquid Cooling.<br>
+      Two Approaches.<br>
+      <em>One Answer.</em>
+    </h1>
+
+    <p class="hero-sub">
+      The data center industry has converged on a clear direction — hybrid liquid cooling combining direct-to-chip precision with facility-level heat rejection. APEX didn't react to this convergence. <strong>We built it first.</strong> Waterless. Containerized. AI-native. Turnkey.
+    </p>
+
+    <!-- Stat strip -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid rgba(168,212,245,0.12);border-radius:6px;overflow:hidden;max-width:700px;margin:0 auto;animation:fadeUp 0.8s ease 0.3s both;">
+      <div style="padding:16px;text-align:center;border-right:1px solid rgba(168,212,245,0.12);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#3ECF82;line-height:1;margin-bottom:3px;">ZERO</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);">Water Used</div>
+      </div>
+      <div style="padding:16px;text-align:center;border-right:1px solid rgba(168,212,245,0.12);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#5BA8E8;line-height:1;margin-bottom:3px;">200kW</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);">Per Rack</div>
+      </div>
+      <div style="padding:16px;text-align:center;border-right:1px solid rgba(168,212,245,0.12);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#FF4D00;line-height:1;margin-bottom:3px;">&lt;30s</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);">Response</div>
+      </div>
+      <div style="padding:16px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#FFD600;line-height:1;margin-bottom:3px;">1.04</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);">Target PUE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VS SECTION ── -->
+<section class="vs-section">
+  <p class="section-label">The Industry Landscape</p>
+  <h2 class="section-title">Two Approaches. One Outcome.</h2>
+  <p class="section-sub">The graphic says it clearly. The industry has two liquid cooling approaches — and both have real strengths and real limitations. APEX combines both into a single warranted system.</p>
+
+  <div class="vs-grid">
+
+    <!-- LEFT: Chip-to-Cool -->
+    <div class="vs-col" style="background:rgba(10,122,62,0.06);border-color:rgba(10,122,62,0.2);">
+      <div class="vs-col-header">
+        <div class="vs-tag" style="background:rgba(10,122,62,0.15);color:#3ECF82;">Direct-to-Chip</div>
+        <div class="vs-col-name" style="color:#3ECF82;">Chip-to-Cool</div>
+        <div class="vs-col-desc">Cooling at the source. Liquid goes straight to the GPU/CPU die. Maximum thermal efficiency for high-density AI compute.</div>
+      </div>
+      <div class="vs-points">
+        <div class="vs-point">
+          <span class="vs-icon">✅</span>
+          <span style="color:var(--ltgray);">Extremely efficient heat removal at the chip level</span>
+        </div>
+        <div class="vs-point">
+          <span class="vs-icon">✅</span>
+          <span style="color:var(--ltgray);">Built for high-density AI and HPC workloads</span>
+        </div>
+        <div class="vs-point">
+          <span class="vs-icon">✅</span>
+          <span style="color:var(--ltgray);">Reduces reliance on inefficient room air cooling</span>
+        </div>
+        <div class="vs-point">
+          <span class="vs-icon">✅</span>
+          <span style="color:var(--ltgray);">Precision control at the rack and chip level</span>
+        </div>
+      </div>
+      <div class="vs-warning">
+        <div class="vs-warning-title">⚠ The Real Challenges</div>
+        <div class="vs-warning-item"><span>✗</span><span>Liquid inside the IT space — leak risk is critical</span></div>
+        <div class="vs-warning-item"><span>✗</span><span>Connection integrity must be exact — no tolerance for error</span></div>
+        <div class="vs-warning-item"><span>✗</span><span>Maintenance is significantly more complex</span></div>
+        <div class="vs-warning-item"><span>✗</span><span>Commissioning must be exact — execution challenge</span></div>
+      </div>
+    </div>
+
+    <!-- VS DIVIDER -->
+    <div class="vs-divider">
+      <div class="vs-circle">VS</div>
+    </div>
+
+    <!-- RIGHT: Cooled Loop -->
+    <div class="vs-col" style="background:rgba(27,95,168,0.06);border-color:rgba(27,95,168,0.2);">
+      <div class="vs-col-header">
+        <div class="vs-tag" style="background:rgba(27,95,168,0.15);color:#5BA8E8;">Facility-Level</div>
+        <div class="vs-col-name" style="color:#5BA8E8;">Cooled Loop System</div>
+        <div class="vs-col-desc">Cools indirectly. Liquid stays outside the IT equipment. Proven, standard, reliable — but limited at extreme rack densities.</div>
+      </div>
+      <div class="vs-points">
+        <div class="vs-point">
+          <span class="vs-icon">✅</span>
+          <span style="color:var(--ltgray);">Proven, standard, and reliable at moderate densities</span>
+        </div>
+        <div class="vs-point">
+          <span class="vs-icon">✅</span>
+          <span style="color:var(--ltgray);">Lower risk inside the IT rack — no liquid on hardware</span>
+        </div>
+        <div class="vs-point">
+          <span class="vs-icon">✅</span>
+          <span style="color:var(--ltgray);">Easier maintenance at scale for facilities teams</span>
+        </div>
+        <div class="vs-point">
+          <span class="vs-icon">⚠️</span>
+          <span style="color:var(--ltgray);">Less efficient at extreme AI rack densities above 35 kW</span>
+        </div>
+      </div>
+      <div class="vs-warning" style="background:rgba(27,95,168,0.08);border-color:rgba(27,95,168,0.2);">
+        <div class="vs-warning-title" style="color:#5BA8E8;">🔵 The Water Problem</div>
+        <div class="vs-warning-item"><span>✗</span><span>Cooling towers consume millions of gallons annually</span></div>
+        <div class="vs-warning-item"><span>✗</span><span>HFC refrigerants face AIM Act phase-out from 2027</span></div>
+        <div class="vs-warning-item"><span>✗</span><span>Water dependency creates regulatory and supply risk</span></div>
+        <div class="vs-warning-item"><span>✗</span><span>Cannot scale to 100+ kW per rack without liquid assist</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Where industry is going -->
+  <div class="industry-going">
+    <div class="ig-header">
+      <span class="ig-header-icon">📍</span>
+      <span class="ig-header-text">Where the Industry Is Going — Hybrid Systems</span>
+    </div>
+    <div class="ig-body">
+      <div class="ig-col" style="background:rgba(10,122,62,0.08);border:1px solid rgba(10,122,62,0.15);">
+        <span class="ig-col-icon">🔲</span>
+        <div class="ig-col-name" style="color:#3ECF82;">Direct-to-Chip</div>
+        <div class="ig-col-desc">For high-density AI compute. Cold plates on every GPU. Precision thermal control at the chip junction level.</div>
+      </div>
+      <div class="ig-plus">+</div>
+      <div class="ig-col" style="background:rgba(91,45,142,0.08);border:1px solid rgba(91,45,142,0.15);">
+        <span class="ig-col-icon">🌬️</span>
+        <div class="ig-col-name" style="color:#B388F0;">Facility Loops</div>
+        <div class="ig-col-desc">To reject heat to atmosphere. The thermal backbone that removes heat from the building entirely.</div>
+      </div>
+    </div>
+    <div style="padding:0 28px 24px;text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--yellow);letter-spacing:2px;margin-bottom:6px;">
+        APEX IS THAT HYBRID SYSTEM — ALREADY BUILT
+      </div>
+      <div style="font-size:13px;color:var(--gray);max-width:600px;margin:0 auto;">
+        Not two vendors bolted together. One system. One warranty. One deployment. GPU cold plate through dry air condenser — integrated, commissioned, and monitored by APEX.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW APEX SOLVES IT ── -->
+<section class="answer-section">
+  <p class="section-label">The APEX Answer</p>
+  <h2 class="section-title">We Solve Every Challenge. All Five.</h2>
+  <p class="section-sub">The graphic's warning box lists five real challenges with direct-to-chip liquid cooling. APEX was engineered to address each one specifically — not as an afterthought, but as a first-class design requirement.</p>
+
+  <div class="answer-grid">
+
+    <div class="answer-card l1">
+      <span class="card-num">01</span>
+      <span class="card-icon">💧</span>
+      <div class="card-title">Liquid Inside the IT Space</div>
+      <div class="card-warning">⚠ The industry's #1 concern</div>
+      <div class="card-answer">The only liquid in the APEX server hall is <strong>non-toxic propylene glycol — 30% food-safe solution.</strong> Not water. Not ammonia. Not a regulated chemical. If it leaks the worst outcome is a wet floor. No equipment damage. No toxic exposure. No environmental incident. Ammonia never enters the server hall at any point under any condition.</div>
+      <div class="card-specs">
+        <div class="spec-line">Non-toxic, non-corrosive, non-flammable glycol only</div>
+        <div class="spec-line">Ammonia confined to sealed mechanical room — always</div>
+        <div class="spec-line">Safe enough to handle without gloves</div>
+      </div>
+    </div>
+
+    <div class="answer-card l2">
+      <span class="card-num">02</span>
+      <span class="card-icon">🔒</span>
+      <div class="card-title">Leak Risk Is Critical</div>
+      <div class="card-warning">⚠ Connection integrity challenge</div>
+      <div class="card-answer">APEX addresses leak risk at three independent layers. <strong>Quick-disconnect fittings</strong> rated for zero-spill server swap in under 5 seconds. <strong>Drip trays</strong> under every connection point in the rack manifold. <strong>Ammonia trace sensors</strong> at the heat exchanger boundary detect less than 1 ppm in the glycol loop and trigger <strong>automated isolation valves in under 2 seconds.</strong></div>
+      <div class="card-specs">
+        <div class="spec-line">Quick-disconnect: zero-spill server swap in &lt;5 seconds</div>
+        <div class="spec-line">NH3 trace detection: &lt;1 ppm in glycol loop</div>
+        <div class="spec-line">Auto-isolation valves: 2-second closure on any anomaly</div>
+      </div>
+    </div>
+
+    <div class="answer-card l3">
+      <span class="card-num">03</span>
+      <span class="card-icon">🔌</span>
+      <div class="card-title">Connection Integrity Matters</div>
+      <div class="card-warning">⚠ Precision integration required</div>
+      <div class="card-answer">APEX cold plates are <strong>validated for Nvidia GB200 NVLink and AMD MI300X+ form factors</strong> — not generic fittings adapted from industrial use. Quick-disconnect fittings are engineered specifically for AI server rack dimensions and swap cycles. The rack CDU manifold has <strong>per-plate flow control valves</strong> that individually balance pressure across every cold plate in the rack.</div>
+      <div class="card-specs">
+        <div class="spec-line">Validated: Nvidia GB200, AMD MI300X+, OCP standard</div>
+        <div class="spec-line">Per-plate flow control — individual pressure balance</div>
+        <div class="spec-line">Rated to 200+ kW per rack at the cold plate level</div>
+      </div>
+    </div>
+
+    <div class="answer-card l4">
+      <span class="card-num">04</span>
+      <span class="card-icon">🧠</span>
+      <div class="card-title">Maintenance Is More Complex</div>
+      <div class="card-warning">⚠ Operational maturity required</div>
+      <div class="card-answer">APEX Control software monitors <strong>every cold plate, every valve, every flow rate, every GPU junction temperature</strong> in real time — 24/7 from Austin HQ via Starlink. A live digital twin of the entire facility runs in the cloud. <strong>Predictive maintenance alerts arrive weeks before a failure occurs</strong> — not after. The system tells you what needs attention before it becomes a problem.</div>
+      <div class="card-specs">
+        <div class="spec-line">Per-GPU junction temp monitoring — GPU monitoring, GPU monitoring-SMI</div>
+        <div class="spec-line">Live digital twin — cloud analytics, 24/7</div>
+        <div class="spec-line">Predictive alerts: weeks ahead, not hours after</div>
+      </div>
+    </div>
+
+    <div class="answer-card l5">
+      <span class="card-num">05</span>
+      <span class="card-icon">⚡</span>
+      <div class="card-title">Commissioning Must Be Exact</div>
+      <div class="card-warning">⚠ The hardest execution challenge</div>
+      <div class="card-answer">This is <strong>Donald Kreger</strong> — Co-Founder and CSOO — 38 years of ammonia refrigeration commissioning, systems up to 29 MW, 13 federal safety certifications. The APEX convoy brings a service truck with an engine-drive welder, rotary screw compressor, full NH3 PPE and SCBA, complete spare parts inventory, and certified technicians. <strong>Commissioning is not an afterthought at APEX. It is the core product.</strong></div>
+      <div class="card-specs">
+        <div class="spec-line">Don Kreger: 38 years ammonia refrigeration — CSOO</div>
+        <div class="spec-line">Full commissioning convoy — every tool, every certification</div>
+        <div class="spec-line">Factory pre-charged and pressure-tested before delivery</div>
+      </div>
+    </div>
+
+    <div class="answer-card exec">
+      <span class="card-num">+</span>
+      <span class="card-icon">🚛</span>
+      <div class="card-title">The Bonus Answer — Zero Water</div>
+      <div class="card-warning">💡 What nobody else offers</div>
+      <div class="card-answer">The graphic's comparison stops at cooling efficiency. It doesn't address the <strong>water crisis.</strong> APEX does. Dry air-cooled ammonia condensers reject heat to atmosphere with <strong>zero water at any ambient temperature — including 113°F Texas summer.</strong> No cooling tower. No makeup water. No evaporation. No water treatment chemicals. No water bill. No regulatory exposure. Not 80% less. Not 95% less. <strong>Zero. Always.</strong></div>
+      <div class="card-specs">
+        <div class="spec-line">Zero water: 18°C to 45°C ambient — always dry</div>
+        <div class="spec-line">GWP=0 refrigerant — AIM Act compliant forever</div>
+        <div class="spec-line">vs 530,000 gallons/day for a 100 MW cooling tower</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Execution callout -->
+  <div class="execution-callout">
+    <div class="exec-left">
+      <div class="exec-title">
+        Cooling Strategy Isn't a Design Choice.<br>
+        <em>It's an Execution Challenge.</em>
+      </div>
+      <div class="exec-desc">
+        The graphic says it. We built around it. Every competitor in this space sells a component — a chiller, a cold plate, a CDU. APEX is the only company that takes full accountability for the entire thermal path from GPU die to dry air condenser — delivered as a sealed, pre-commissioned, turnkey system that arrives ready to connect. One system. One warranty. One phone number.
+      </div>
+    </div>
+    <div class="exec-stats">
+      <div class="exec-stat">
+        <span class="exec-val" style="color:#3ECF82;">ZERO</span>
+        <span class="exec-lbl">Water<br>Consumed</span>
+      </div>
+      <div class="exec-stat">
+        <span class="exec-val" style="color:#5BA8E8;">1.04</span>
+        <span class="exec-lbl">Target<br>PUE</span>
+      </div>
+      <div class="exec-stat">
+        <span class="exec-val" style="color:#FF4D00;">&lt;30s</span>
+        <span class="exec-lbl">Load<br>Response</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BOTTOM LINE ── -->
+<section class="bottom-line">
+  <div class="bl-bg-text">APEX</div>
+  <div class="bl-content">
+
+    <div class="bl-quote">
+      "The closer you get to the chip — the less room you have for error.<br>
+      Cooling strategy isn't a design choice. <strong>It's an execution challenge.</strong>"
+    </div>
+    <div class="bl-attr">— Industry consensus, 2026</div>
+
+    <div class="bl-statement">
+      <div class="bl-statement-text">
+        Every company in this space has a design.<br>
+        <span>Nobody owns the execution.</span><br>
+        APEX does.
+      </div>
+      <div class="bl-statement-sub">
+        We are the only company that takes accountability for the entire thermal path — from the GPU cold plate through the ammonia refrigeration circuit to the dry air condenser — deployed as a sealed, pre-commissioned, turnkey containerized system. No water. No regulatory exposure. No cooling tower. No excuses.
+      </div>
+    </div>
+
+    <div class="bl-cta">
+      <a href="https://apexmechpod.com" class="btn-red">⚡ See the MechPod</a>
+      <a href="mailto:apexcoolingtech@gmail.com" class="btn-outline">Talk to Engineering →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo"><span>APEX</span> COOLING</div>
+  <div class="footer-links">
+    <a href="https://apexcoolingtech.com">Company</a>
+    <a href="https://apexmechpod.com">MechPod</a>
+    <a href="mailto:apexcoolingtech@gmail.com">Contact</a>
+  </div>
+  <div class="footer-info">
+    APEX Cooling Technologies, LLC  ·  Austin, Texas<br>
+    Patent Pending  ·  EIN: 41-5260850
+  </div>
+</footer>
+
+</body>
+</html>

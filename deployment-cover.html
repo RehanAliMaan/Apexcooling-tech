@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX Cooling Technologies — MechPod Deployment</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;min-height:100vh;background:#060E1A;}
+body{font-family:'Barlow',sans-serif;color:#F4F8FF;overflow-x:hidden;}
+
+.page{
+  width:100%;min-height:100vh;
+  background:#060E1A;
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+}
+
+/* ── DARK GRID BG matching binder cover ── */
+.bg{
+  position:absolute;inset:0;z-index:0;
+  background:
+    repeating-linear-gradient(0deg,transparent,transparent 44px,rgba(168,212,245,0.016) 44px,rgba(168,212,245,0.016) 45px),
+    repeating-linear-gradient(90deg,transparent,transparent 44px,rgba(168,212,245,0.016) 44px,rgba(168,212,245,0.016) 45px);
+}
+.glow-l{position:absolute;z-index:0;width:700px;height:700px;background:radial-gradient(circle,rgba(26,90,174,0.1) 0%,transparent 65%);top:-200px;left:-200px;}
+.glow-r{position:absolute;z-index:0;width:600px;height:600px;background:radial-gradient(circle,rgba(62,207,130,0.07) 0%,transparent 65%);bottom:-150px;right:-100px;}
+.glow-c{position:absolute;z-index:0;width:1000px;height:500px;background:radial-gradient(ellipse,rgba(13,43,85,0.5) 0%,transparent 70%);top:25%;left:50%;transform:translateX(-50%);}
+
+/* ── HEADER ── */
+.hdr{
+  position:relative;z-index:20;
+  padding:26px 48px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(168,212,245,0.07);
+}
+.logo{display:flex;align-items:center;gap:14px;}
+.logo svg{width:46px;height:46px;}
+.logo-name{font-family:'Bebas Neue',sans-serif;font-size:27px;letter-spacing:4px;color:#F4F8FF;line-height:1;}
+.logo-name em{color:#CC1100;font-style:normal;}
+.logo-tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(168,212,245,0.45);}
+.patent{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.ppill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,214,0,0.09);border:1px solid rgba(255,214,0,0.28);border-radius:3px;padding:5px 14px;}
+.pdot{width:6px;height:6px;border-radius:50%;background:#FFD600;animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.ptxt{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#FFD600;}
+.pnum{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,214,0,0.5);}
+
+/* ── SCENE ── */
+.scene{flex:1;position:relative;z-index:5;display:flex;align-items:center;justify-content:center;padding:8px 0 0;}
+.scene svg{width:100%;max-width:1440px;height:auto;display:block;}
+
+/* ── FOOTER ── */
+.ftr{
+  position:relative;z-index:20;
+  padding:22px 48px 30px;
+  border-top:1px solid rgba(168,212,245,0.06);
+  background:linear-gradient(180deg,transparent 0%,rgba(4,10,18,0.98) 30%,#040A12 100%);
+}
+.ftr-inner{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:28px;align-items:center;
+  max-width:1380px;margin:0 auto;
+}
+.fhl{font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,3vw,42px);line-height:0.95;letter-spacing:2px;color:#F4F8FF;}
+.fhl em{color:#3ECF82;font-style:normal;}
+.fhl span{color:#CC1100;}
+.fsub{font-size:12px;font-weight:300;color:#5A6A7E;line-height:1.6;margin-top:8px;max-width:380px;}
+
+.fstats{display:flex;gap:16px;justify-content:center;}
+.fstat{padding:12px 16px;text-align:center;background:rgba(13,27,50,0.8);border:1px solid rgba(168,212,245,0.09);border-radius:6px;}
+.fval{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;margin-bottom:3px;}
+.flbl{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#3A4A5A;}
+
+.fspecs{display:flex;flex-direction:column;gap:5px;align-items:flex-end;}
+.fspec{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#2A3A4A;display:flex;gap:6px;}
+.fspec::before{content:'›';color:#CC1100;}
+.fspec span{color:#6A7A8A;}
+.fco{margin-top:10px;font-family:'Barlow Condensed',sans-serif;font-size:9px;color:#1A2A38;letter-spacing:1px;text-transform:uppercase;text-align:right;line-height:1.9;}
+
+@media(max-width:800px){.hdr,.ftr{padding:16px 20px;}.ftr-inner{grid-template-columns:1fr;}.fstats,.fspecs{display:none;}}
+@media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}}
+</style>
+</head>
+<body>
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(4,10,18,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(204,17,0,0.2);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#F4F8FF;"><span style="color:#CC1100;">APEX</span> COOLING</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+    <a href="index.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Home</a>
+    <a href="about.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">About</a>
+    <a href="solution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Solution</a>
+    <a href="why-apex.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Why APEX</a>
+    <a href="roi.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">ROI</a>
+    <a href="evolution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Evolution</a>
+    <a href="industry-analysis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Industry</a>
+    <a href="crisis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Crisis</a>
+    <a href="deployment-cover.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Deployment</a>
+    <a href="news.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">News</a>
+    <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Contact</a>
+    <a href="https://apexmechpod.com" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#F4F8FF;background:#CC1100;padding:8px 18px;border-radius:3px;text-decoration:none;">MechPod →</a>
+  </div>
+</nav>
+<div class="page">
+<div class="bg"></div>
+<div class="glow-l"></div>
+<div class="glow-r"></div>
+<div class="glow-c"></div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="logo">
+    <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="h1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8451A"/><stop offset="100%" stop-color="#8B1A00"/></linearGradient>
+        <linearGradient id="h2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4A90D9"/><stop offset="100%" stop-color="#0D3A70"/></linearGradient>
+        <linearGradient id="h3" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#FF6B00"/><stop offset="100%" stop-color="#FFE066"/></linearGradient>
+      </defs>
+      <path d="M110,175 C110,175 45,130 35,100 C25,70 30,45 50,38 C70,31 90,45 110,70 Z" fill="url(#h1)"/>
+      <ellipse cx="75" cy="58" rx="35" ry="30" fill="url(#h1)"/>
+      <path d="M110,175 C110,175 175,130 185,100 C195,70 190,45 170,38 C150,31 130,45 110,70 Z" fill="url(#h2)"/>
+      <ellipse cx="145" cy="58" rx="35" ry="30" fill="url(#h2)"/>
+      <line x1="110" y1="26" x2="110" y2="175" stroke="#0D2B55" stroke-width="3"/>
+      <path d="M88,42 C82,28 78,18 85,8 C88,3 90,0 88,0 C84,-2 76,6 74,14 C70,8 72,2 76,-2 C72,0 64,10 66,22 C60,16 62,8 66,4 C60,8 54,18 58,30 C54,28 52,20 54,14 C48,22 46,34 52,44 C56,52 66,56 76,54 C86,52 92,46 88,42 Z" fill="url(#h3)" transform="translate(16,14) scale(0.88)"/>
+      <path d="M118,42 L124,20 L130,42 Z" fill="#A8D4F5" opacity="0.9"/>
+      <path d="M130,46 L138,18 L146,46 Z" fill="#A8D4F5" opacity="0.85"/>
+      <line x1="134" y1="10" x2="134" y2="20" stroke="#E8F4FF" stroke-width="1.8"/>
+      <line x1="129" y1="15" x2="139" y2="15" stroke="#E8F4FF" stroke-width="1.8"/>
+    </svg>
+    <div>
+      <div class="logo-name"><em>APEX</em> COOLING TECHNOLOGIES</div>
+      <div class="logo-tag">Modular · Waterless · AI-Native</div>
+    </div>
+  </div>
+  <div class="patent">
+    <div class="ppill"><div class="pdot"></div><span class="ptxt">Patent Pending</span></div>
+    <div class="pnum">U.S. App. No. 64/055,155 · Filed May 1, 2026</div>
+  </div>
+</div>
+
+<!-- BIRD'S EYE SVG SCENE -->
+<div class="scene">
+<svg viewBox="0 0 1380 540" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <!-- Building glass dark blue -->
+  <linearGradient id="dcg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#1E4468"/>
+    <stop offset="50%" stop-color="#152E4A"/>
+    <stop offset="100%" stop-color="#0C1E30"/>
+  </linearGradient>
+
+  <!-- Tarmac/ground -->
+  <linearGradient id="gnd" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#111922"/>
+    <stop offset="100%" stop-color="#0C1318"/>
+  </linearGradient>
+
+  <!-- Pod cream top-down -->
+  <linearGradient id="pod" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#F2E8CC"/>
+    <stop offset="100%" stop-color="#D4C8A8"/>
+  </linearGradient>
+
+  <!-- Condenser charcoal -->
+  <linearGradient id="cond" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#1E3020"/>
+    <stop offset="100%" stop-color="#141E14"/>
+  </linearGradient>
+
+  <!-- Supply blue pipe -->
+  <linearGradient id="sb" x1="1" y1="0" x2="0" y2="0">
+    <stop offset="0%" stop-color="#0A3A8E"/>
+    <stop offset="100%" stop-color="#1E6ACE"/>
+  </linearGradient>
+
+  <!-- Return red pipe -->
+  <linearGradient id="rr" x1="1" y1="0" x2="0" y2="0">
+    <stop offset="0%" stop-color="#8A0A00"/>
+    <stop offset="100%" stop-color="#CC2200"/>
+  </linearGradient>
+
+  <!-- Glow filters -->
+  <filter id="gblue" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="4" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="ggreen" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="5" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="gshadow">
+    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.6)"/>
+  </filter>
+  <filter id="bshadow">
+    <feDropShadow dx="6" dy="6" stdDeviation="10" flood-color="rgba(0,0,0,0.7)"/>
+  </filter>
+
+  <!-- Window grid pattern on building -->
+  <pattern id="wgrid" x="0" y="0" width="32" height="26" patternUnits="userSpaceOnUse">
+    <rect x="1" y="1" width="30" height="24" rx="1" fill="rgba(80,160,220,0.08)" stroke="rgba(150,210,255,0.12)" stroke-width="0.5"/>
+  </pattern>
+
+  <!-- Tarmac texture -->
+  <pattern id="tarmac" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+    <line x1="0" y1="40" x2="80" y2="40" stroke="rgba(255,255,255,0.018)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="80" stroke="rgba(255,255,255,0.018)" stroke-width="0.5"/>
+  </pattern>
+
+  <!-- Heat shimmer rising from condensers -->
+  <pattern id="heat" x="0" y="0" width="24" height="14" patternUnits="userSpaceOnUse">
+    <path d="M0,7 Q6,0 12,7 Q18,14 24,7" stroke="rgba(80,200,100,0.22)" stroke-width="0.7" fill="none"/>
+  </pattern>
+</defs>
+
+<!-- ══ BACKGROUND ══ -->
+<rect width="1380" height="540" fill="#080E18"/>
+<rect width="1380" height="540" fill="url(#tarmac)"/>
+
+<!-- Subtle atmospheric depth -->
+<radialGradient id="atm" cx="55%" cy="50%" r="55%">
+  <stop offset="0%" stop-color="rgba(13,35,65,0.5)"/>
+  <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+</radialGradient>
+<rect width="1380" height="540" fill="url(#atm)"/>
+
+<!-- ══ DEPLOYMENT PAD ══ -->
+<rect x="0" y="50" width="1380" height="450" fill="rgba(14,22,32,0.7)"/>
+<rect x="0" y="50" width="1380" height="450" fill="url(#tarmac)"/>
+
+<!-- Pad edge glow top -->
+<rect x="0" y="50" width="1380" height="2" fill="rgba(91,168,232,0.15)"/>
+<rect x="0" y="498" width="1380" height="2" fill="rgba(91,168,232,0.08)"/>
+
+<!-- ══ HYPERSCALE DATA CENTER — left half, extends off screen ══ -->
+<g filter="url(#bshadow)">
+  <!-- Main building roof — extends off left edge -->
+  <rect x="-80" y="0" width="720" height="540" fill="url(#dcg)" stroke="rgba(60,120,180,0.3)" stroke-width="1.5"/>
+  <!-- Glass window pattern overlay -->
+  <rect x="-80" y="0" width="720" height="540" fill="url(#wgrid)" opacity="0.9"/>
+
+  <!-- Structural lines — server hall rows visible from above -->
+  <line x1="-80" y1="108" x2="640" y2="108" stroke="rgba(80,160,240,0.12)" stroke-width="2"/>
+  <line x1="-80" y1="162" x2="640" y2="162" stroke="rgba(80,160,240,0.08)" stroke-width="1"/>
+  <line x1="-80" y1="216" x2="640" y2="216" stroke="rgba(80,160,240,0.12)" stroke-width="2"/>
+  <line x1="-80" y1="270" x2="640" y2="270" stroke="rgba(80,160,240,0.08)" stroke-width="1"/>
+  <line x1="-80" y1="324" x2="640" y2="324" stroke="rgba(80,160,240,0.12)" stroke-width="2"/>
+  <line x1="-80" y1="378" x2="640" y2="378" stroke="rgba(80,160,240,0.08)" stroke-width="1"/>
+  <line x1="-80" y1="432" x2="640" y2="432" stroke="rgba(80,160,240,0.12)" stroke-width="2"/>
+  <line x1="-80" y1="486" x2="640" y2="486" stroke="rgba(80,160,240,0.08)" stroke-width="1"/>
+
+  <!-- Vertical structural lines -->
+  <line x1="80" y1="0" x2="80" y2="540" stroke="rgba(80,160,240,0.07)" stroke-width="1"/>
+  <line x1="240" y1="0" x2="240" y2="540" stroke="rgba(80,160,240,0.07)" stroke-width="1"/>
+  <line x1="400" y1="0" x2="400" y2="540" stroke="rgba(80,160,240,0.07)" stroke-width="1"/>
+  <line x1="560" y1="0" x2="560" y2="540" stroke="rgba(80,160,240,0.07)" stroke-width="1"/>
+
+  <!-- Rooftop HVAC equipment (legacy cooling — being displaced) -->
+  <!-- Row 1 top -->
+  <rect x="20" y="18" width="110" height="55" rx="3" fill="rgba(40,80,120,0.85)" stroke="rgba(60,120,180,0.35)" stroke-width="0.8"/>
+  <rect x="145" y="18" width="110" height="55" rx="3" fill="rgba(40,80,120,0.85)" stroke="rgba(60,120,180,0.35)" stroke-width="0.8"/>
+  <rect x="270" y="18" width="110" height="55" rx="3" fill="rgba(40,80,120,0.85)" stroke="rgba(60,120,180,0.35)" stroke-width="0.8"/>
+  <rect x="395" y="18" width="110" height="55" rx="3" fill="rgba(40,80,120,0.8)" stroke="rgba(60,120,180,0.3)" stroke-width="0.8"/>
+  <!-- Row 2 -->
+  <rect x="20" y="200" width="90" height="50" rx="3" fill="rgba(40,80,120,0.75)" stroke="rgba(60,120,180,0.25)" stroke-width="0.8"/>
+  <rect x="120" y="200" width="90" height="50" rx="3" fill="rgba(40,80,120,0.75)" stroke="rgba(60,120,180,0.25)" stroke-width="0.8"/>
+  <rect x="220" y="200" width="90" height="50" rx="3" fill="rgba(40,80,120,0.75)" stroke="rgba(60,120,180,0.25)" stroke-width="0.8"/>
+  <rect x="320" y="200" width="90" height="50" rx="3" fill="rgba(40,80,120,0.7)" stroke="rgba(60,120,180,0.22)" stroke-width="0.8"/>
+  <!-- Row 3 -->
+  <rect x="20" y="390" width="110" height="55" rx="3" fill="rgba(40,80,120,0.85)" stroke="rgba(60,120,180,0.35)" stroke-width="0.8"/>
+  <rect x="145" y="390" width="110" height="55" rx="3" fill="rgba(40,80,120,0.85)" stroke="rgba(60,120,180,0.35)" stroke-width="0.8"/>
+  <rect x="270" y="390" width="110" height="55" rx="3" fill="rgba(40,80,120,0.85)" stroke="rgba(60,120,180,0.35)" stroke-width="0.8"/>
+  <rect x="395" y="390" width="110" height="55" rx="3" fill="rgba(40,80,120,0.8)" stroke="rgba(60,120,180,0.3)" stroke-width="0.8"/>
+
+  <!-- Cable trays running across building -->
+  <rect x="-80" y="130" width="720" height="8" rx="4" fill="rgba(40,100,160,0.25)" stroke="rgba(80,150,220,0.2)" stroke-width="0.5"/>
+  <rect x="-80" y="345" width="720" height="8" rx="4" fill="rgba(40,100,160,0.25)" stroke="rgba(80,150,220,0.2)" stroke-width="0.5"/>
+
+  <!-- Building label -->
+  <rect x="80" y="240" width="320" height="72" rx="5" fill="rgba(0,0,0,0.35)"/>
+  <text x="240" y="268" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="26" fill="rgba(255,255,255,0.28)" letter-spacing="5">HYPERSCALE</text>
+  <text x="240" y="291" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="20" fill="rgba(255,255,255,0.22)" letter-spacing="4">DATA CENTER</text>
+  <text x="240" y="307" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="rgba(91,168,232,0.35)" letter-spacing="3">AI INFRASTRUCTURE</text>
+
+  <!-- Right edge wall -->
+  <rect x="630" y="0" width="14" height="540" fill="rgba(15,35,60,0.95)" stroke="rgba(60,130,200,0.45)" stroke-width="1"/>
+
+  <!-- Glowing edge where building meets pad — the connection zone -->
+  <rect x="640" y="0" width="5" height="540" fill="rgba(91,168,232,0.35)" filter="url(#gblue)"/>
+</g>
+
+<!-- ══ CONNECTION ZONE LABEL ══ -->
+<rect x="644" y="232" width="14" height="76" rx="3" fill="rgba(91,168,232,0.08)" stroke="rgba(91,168,232,0.2)" stroke-width="0.5"/>
+<text x="651" y="272" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7" font-weight="700" fill="rgba(91,168,232,0.5)" letter-spacing="1" transform="rotate(-90,651,272)">CONNECTION ZONE</text>
+
+<!-- ══ MAIN GLYCOL MANIFOLD PIPES ══ -->
+<!-- Running vertically down the scene, parallel to building edge -->
+<!-- Supply (blue) at x=672, Return (red) at x=686 -->
+<rect x="669" y="68" width="9" height="422" rx="4.5" fill="url(#sb)" stroke="rgba(26,90,180,0.5)" stroke-width="0.5" filter="url(#gblue)" opacity="0.95"/>
+<rect x="683" y="68" width="9" height="422" rx="4.5" fill="url(#rr)" stroke="rgba(150,20,0,0.5)" stroke-width="0.5" opacity="0.95"/>
+
+<!-- Manifold caps -->
+<ellipse cx="673.5" cy="68" rx="5" ry="4" fill="#2A7ADE"/>
+<ellipse cx="673.5" cy="490" rx="5" ry="4" fill="#2A7ADE"/>
+<ellipse cx="687.5" cy="68" rx="5" ry="4" fill="#DD2200"/>
+<ellipse cx="687.5" cy="490" rx="5" ry="4" fill="#DD2200"/>
+
+<!-- Pipe labels -->
+<text x="668" y="62" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7" font-weight="700" fill="#5BA8E8" letter-spacing="0.5" transform="rotate(-90 668 62) translate(-210 0)">◀ GLYCOL SUPPLY (COLD 18°C)</text>
+<text x="692" y="62" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7" font-weight="700" fill="#EE3311" letter-spacing="0.5" transform="rotate(-90 692 62) translate(-210 0)">WARM RETURN (28°C) ▶</text>
+
+<!-- ══ 20 MECHPODS — 2 columns × 10 rows ══ -->
+<!-- Column A: x=702, Column B: x=802 -->
+<!-- Row y positions: 72,98,124,150,176,202,228,254,280,306,332,358,384,410,436,462 (but only 10 per col)-->
+<!-- Using 10 rows spaced 43px, starting y=76 -->
+
+<!-- Branch pipes from manifold to pods — Supply (blue) -->
+<g stroke="#1A5AAE" stroke-width="2.2" opacity="0.85" fill="none">
+  <!-- Col A branches -->
+  <line x1="678" y1="89" x2="702" y2="89"/>
+  <line x1="678" y1="132" x2="702" y2="132"/>
+  <line x1="678" y1="175" x2="702" y2="175"/>
+  <line x1="678" y1="218" x2="702" y2="218"/>
+  <line x1="678" y1="261" x2="702" y2="261"/>
+  <line x1="678" y1="304" x2="702" y2="304"/>
+  <line x1="678" y1="347" x2="702" y2="347"/>
+  <line x1="678" y1="390" x2="702" y2="390"/>
+  <line x1="678" y1="433" x2="702" y2="433"/>
+  <line x1="678" y1="476" x2="702" y2="476"/>
+  <!-- Col B branches (extend from Col A pods) -->
+  <line x1="762" y1="89" x2="806" y2="89"/>
+  <line x1="762" y1="132" x2="806" y2="132"/>
+  <line x1="762" y1="175" x2="806" y2="175"/>
+  <line x1="762" y1="218" x2="806" y2="218"/>
+  <line x1="762" y1="261" x2="806" y2="261"/>
+  <line x1="762" y1="304" x2="806" y2="304"/>
+  <line x1="762" y1="347" x2="806" y2="347"/>
+  <line x1="762" y1="390" x2="806" y2="390"/>
+  <line x1="762" y1="433" x2="806" y2="433"/>
+  <line x1="762" y1="476" x2="806" y2="476"/>
+</g>
+
+<!-- Branch pipes — Return (red) -->
+<g stroke="#CC1100" stroke-width="2.2" opacity="0.8" fill="none">
+  <line x1="692" y1="95" x2="702" y2="95"/>
+  <line x1="692" y1="138" x2="702" y2="138"/>
+  <line x1="692" y1="181" x2="702" y2="181"/>
+  <line x1="692" y1="224" x2="702" y2="224"/>
+  <line x1="692" y1="267" x2="702" y2="267"/>
+  <line x1="692" y1="310" x2="702" y2="310"/>
+  <line x1="692" y1="353" x2="702" y2="353"/>
+  <line x1="692" y1="396" x2="702" y2="396"/>
+  <line x1="692" y1="439" x2="702" y2="439"/>
+  <line x1="692" y1="482" x2="702" y2="482"/>
+  <line x1="762" y1="95" x2="806" y2="95"/>
+  <line x1="762" y1="138" x2="806" y2="138"/>
+  <line x1="762" y1="181" x2="806" y2="181"/>
+  <line x1="762" y1="224" x2="806" y2="224"/>
+  <line x1="762" y1="267" x2="806" y2="267"/>
+  <line x1="762" y1="310" x2="806" y2="310"/>
+  <line x1="762" y1="353" x2="806" y2="353"/>
+  <line x1="762" y1="396" x2="806" y2="396"/>
+  <line x1="762" y1="439" x2="806" y2="439"/>
+  <line x1="762" y1="482" x2="806" y2="482"/>
+</g>
+
+<!-- NH3 circuit pipes (dashed gold) pod to condenser -->
+<g stroke="rgba(200,175,70,0.6)" stroke-width="1.8" stroke-dasharray="5,3" fill="none">
+  <!-- Col A pods to Col A condensers -->
+  <line x1="762" y1="85" x2="870" y2="85"/>
+  <line x1="762" y1="128" x2="870" y2="128"/>
+  <line x1="762" y1="171" x2="870" y2="171"/>
+  <line x1="762" y1="214" x2="870" y2="214"/>
+  <line x1="762" y1="257" x2="870" y2="257"/>
+  <line x1="762" y1="300" x2="870" y2="300"/>
+  <line x1="762" y1="343" x2="870" y2="343"/>
+  <line x1="762" y1="386" x2="870" y2="386"/>
+  <line x1="762" y1="429" x2="870" y2="429"/>
+  <line x1="762" y1="472" x2="870" y2="472"/>
+  <!-- Col B pods to Col B condensers -->
+  <line x1="866" y1="85" x2="974" y2="85"/>
+  <line x1="866" y1="128" x2="974" y2="128"/>
+  <line x1="866" y1="171" x2="974" y2="171"/>
+  <line x1="866" y1="214" x2="974" y2="214"/>
+  <line x1="866" y1="257" x2="974" y2="257"/>
+  <line x1="866" y1="300" x2="974" y2="300"/>
+  <line x1="866" y1="343" x2="974" y2="343"/>
+  <line x1="866" y1="386" x2="974" y2="386"/>
+  <line x1="866" y1="429" x2="974" y2="429"/>
+  <line x1="866" y1="472" x2="974" y2="472"/>
+</g>
+
+<!-- ══ MECHPOD COLUMN A (10 pods) — x=702 ══ -->
+<!-- Each pod: 60w × 30h, cream, red stripe, numbered -->
+<g id="colA" filter="url(#gshadow)">
+  <g transform="translate(702,74)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">01</text>
+  </g>
+  <g transform="translate(702,117)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">02</text>
+  </g>
+  <g transform="translate(702,160)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">03</text>
+  </g>
+  <g transform="translate(702,203)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">04</text>
+  </g>
+  <g transform="translate(702,246)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">05</text>
+  </g>
+  <g transform="translate(702,289)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">06</text>
+  </g>
+  <g transform="translate(702,332)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">07</text>
+  </g>
+  <g transform="translate(702,375)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">08</text>
+  </g>
+  <g transform="translate(702,418)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">09</text>
+  </g>
+  <g transform="translate(702,461)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">10</text>
+  </g>
+</g>
+
+<!-- ══ MECHPOD COLUMN B (10 pods) — x=806 ══ -->
+<g id="colB" filter="url(#gshadow)">
+  <g transform="translate(806,74)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">11</text>
+  </g>
+  <g transform="translate(806,117)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">12</text>
+  </g>
+  <g transform="translate(806,160)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">13</text>
+  </g>
+  <g transform="translate(806,203)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">14</text>
+  </g>
+  <g transform="translate(806,246)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">15</text>
+  </g>
+  <g transform="translate(806,289)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">16</text>
+  </g>
+  <g transform="translate(806,332)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">17</text>
+  </g>
+  <g transform="translate(806,375)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">18</text>
+  </g>
+  <g transform="translate(806,418)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">19</text>
+  </g>
+  <g transform="translate(806,461)">
+    <rect width="60" height="24" rx="2" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.7"/>
+    <rect width="60" height="6" rx="1" fill="#CC1100"/>
+    <line x1="20" y1="0" x2="20" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="24" stroke="rgba(180,168,140,0.4)" stroke-width="0.5"/>
+    <text x="30" y="17" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="7.5" fill="#CC1100" letter-spacing="1">APEX</text>
+    <text x="54" y="22" font-family="'JetBrains Mono',monospace" font-size="5" fill="rgba(140,130,110,0.8)">20</text>
+  </g>
+</g>
+
+<!-- ══ DRY AIR CONDENSERS — Col A (x=870) + Col B (x=974) ══ -->
+<!-- Each condenser: 50w × 22h, dark charcoal, fan circles from above -->
+<g id="condensers" filter="url(#gshadow)">
+  <!-- Col A condensers -->
+  <g transform="translate(870,72)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="14" cy="11" r="4" fill="none" stroke="rgba(120,200,120,0.18)" stroke-width="0.5"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="4" fill="none" stroke="rgba(120,200,120,0.18)" stroke-width="0.5"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(870,115)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(870,158)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(870,201)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(870,244)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(870,287)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(870,330)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(870,373)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(870,416)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(870,459)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+
+  <!-- Col B condensers -->
+  <g transform="translate(974,72)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(974,115)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(974,158)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(974,201)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(974,244)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(974,287)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(974,330)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(974,373)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(974,416)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+  <g transform="translate(974,459)"><rect width="50" height="22" rx="2" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.6"/><circle cx="14" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><circle cx="36" cy="11" r="7" fill="none" stroke="rgba(120,200,120,0.28)" stroke-width="1.2"/><rect x="0" y="-10" width="50" height="9" fill="url(#heat)" opacity="0.7"/></g>
+</g>
+
+<!-- ══ ANNOTATION LABELS ══ -->
+<!-- Column headers -->
+<rect x="702" y="56" width="60" height="13" rx="2" fill="rgba(204,17,0,0.18)" stroke="rgba(204,17,0,0.4)" stroke-width="0.5"/>
+<text x="732" y="66" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7" font-weight="700" fill="#CC1100" letter-spacing="1">MECHPOD A</text>
+
+<rect x="806" y="56" width="60" height="13" rx="2" fill="rgba(204,17,0,0.18)" stroke="rgba(204,17,0,0.4)" stroke-width="0.5"/>
+<text x="836" y="66" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7" font-weight="700" fill="#CC1100" letter-spacing="1">MECHPOD B</text>
+
+<rect x="870" y="56" width="50" height="13" rx="2" fill="rgba(62,207,130,0.12)" stroke="rgba(62,207,130,0.3)" stroke-width="0.5"/>
+<text x="895" y="66" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7" font-weight="700" fill="#3ECF82" letter-spacing="0.5">COND A</text>
+
+<rect x="974" y="56" width="50" height="13" rx="2" fill="rgba(62,207,130,0.12)" stroke="rgba(62,207,130,0.3)" stroke-width="0.5"/>
+<text x="999" y="66" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7" font-weight="700" fill="#3ECF82" letter-spacing="0.5">COND B</text>
+
+<!-- NH3 pipe label -->
+<rect x="796" y="282" width="68" height="16" rx="2" fill="rgba(8,16,26,0.95)" stroke="rgba(200,175,70,0.35)" stroke-width="0.5"/>
+<text x="830" y="293" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7.5" font-weight="700" fill="rgba(200,175,70,0.9)">NH₃ CIRCUIT</text>
+
+<!-- ZERO WATER callout — prominent, glowing -->
+<g filter="url(#ggreen)">
+  <rect x="1080" y="120" width="160" height="88" rx="6" fill="rgba(8,18,30,0.97)" stroke="rgba(62,207,130,0.55)" stroke-width="1.5"/>
+  <line x1="1080" y1="126" x2="1240" y2="126" stroke="rgba(62,207,130,0.25)" stroke-width="0.5"/>
+  <text x="1160" y="158" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="34" fill="#3ECF82" letter-spacing="2">ZERO</text>
+  <text x="1160" y="174" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9.5" font-weight="700" letter-spacing="2.5" fill="#3ECF82">GALLONS / DAY</text>
+  <text x="1160" y="188" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="8" letter-spacing="1.5" fill="rgba(168,212,245,0.45)">WATER CONSUMED</text>
+  <text x="1160" y="200" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="8" letter-spacing="1.5" fill="rgba(168,212,245,0.45)">AT ANY TEMPERATURE · EVER</text>
+</g>
+
+<!-- PUE stat -->
+<rect x="1080" y="226" width="160" height="64" rx="6" fill="rgba(8,18,30,0.95)" stroke="rgba(91,168,232,0.35)" stroke-width="1"/>
+<text x="1160" y="260" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="30" fill="#5BA8E8">PUE 1.04</text>
+<text x="1160" y="276" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="8.5" font-weight="700" letter-spacing="2" fill="#5BA8E8">TARGET EFFICIENCY</text>
+<text x="1160" y="284" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7.5" letter-spacing="1" fill="rgba(168,212,245,0.35)">vs 1.4–1.8 conventional</text>
+
+<!-- Capacity stat -->
+<rect x="1080" y="308" width="160" height="64" rx="6" fill="rgba(8,18,30,0.95)" stroke="rgba(255,214,0,0.3)" stroke-width="1"/>
+<text x="1160" y="342" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="30" fill="#FFD600">54.8 MW</text>
+<text x="1160" y="358" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="8.5" font-weight="700" letter-spacing="2" fill="#FFD600">TOTAL CAPACITY</text>
+<text x="1160" y="366" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7.5" letter-spacing="1" fill="rgba(168,212,245,0.35)">20 × MechPod 40HC-D</text>
+
+<!-- Legend -->
+<rect x="1080" y="390" width="275" height="110" rx="4" fill="rgba(6,14,24,0.97)" stroke="rgba(168,212,245,0.07)" stroke-width="1"/>
+<text x="1092" y="407" font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="700" letter-spacing="3" fill="rgba(168,212,245,0.4)">LEGEND</text>
+<rect x="1092" y="414" width="22" height="5" rx="2.5" fill="#1E6ACE"/>
+<text x="1120" y="421" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(168,212,245,0.55)">Glycol Supply — Cold 18°C</text>
+<rect x="1092" y="426" width="22" height="5" rx="2.5" fill="#CC2200"/>
+<text x="1120" y="433" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(168,212,245,0.55)">Glycol Return — Warm 28°C</text>
+<line x1="1092" y1="442" x2="1114" y2="442" stroke="rgba(200,175,70,0.65)" stroke-width="2" stroke-dasharray="4,2"/>
+<text x="1120" y="445" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(168,212,245,0.55)">Ammonia Circuit (NH₃ R-717)</text>
+<rect x="1092" y="452" width="22" height="9" rx="1" fill="url(#pod)" stroke="#B8AF95" stroke-width="0.5"/>
+<text x="1120" y="460" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(168,212,245,0.55)">APEX MechPod 40HC-D</text>
+<rect x="1092" y="466" width="22" height="9" rx="1" fill="url(#cond)" stroke="rgba(60,110,60,0.5)" stroke-width="0.5"/>
+<circle cx="1098" cy="470.5" r="3.5" fill="none" stroke="rgba(120,200,120,0.3)" stroke-width="1"/>
+<text x="1120" y="474" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(168,212,245,0.55)">Dry Air Condenser (no water)</text>
+<rect x="1092" y="480" width="22" height="9" rx="1" fill="rgba(30,68,104,0.9)" stroke="rgba(60,130,200,0.35)" stroke-width="0.5"/>
+<text x="1120" y="488" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(168,212,245,0.55)">Hyperscale Data Center</text>
+
+<!-- North indicator -->
+<g transform="translate(1310,90)">
+  <circle cx="0" cy="0" r="22" fill="rgba(8,18,30,0.9)" stroke="rgba(168,212,245,0.15)" stroke-width="1"/>
+  <polygon points="0,-15 5,8 0,3 -5,8" fill="#5BA8E8"/>
+  <polygon points="0,15 5,-8 0,-3 -5,-8" fill="rgba(91,168,232,0.25)"/>
+  <text x="0" y="-20" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="8" font-weight="700" fill="#5BA8E8">N</text>
+</g>
+
+<!-- Scale bar -->
+<line x1="1080" y1="76" x2="1240" y2="76" stroke="rgba(168,212,245,0.25)" stroke-width="1"/>
+<line x1="1080" y1="72" x2="1080" y2="80" stroke="rgba(168,212,245,0.35)" stroke-width="0.8"/>
+<line x1="1240" y1="72" x2="1240" y2="80" stroke="rgba(168,212,245,0.35)" stroke-width="0.8"/>
+<text x="1160" y="70" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(168,212,245,0.3)">≈ 600 ft deployment width</text>
+
+<!-- Pod count labels -->
+<text x="763" y="520" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="700" fill="rgba(204,17,0,0.6)" letter-spacing="2">20 × APEX MECHPOD 40HC-D</text>
+<text x="921" y="520" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="700" fill="rgba(62,207,130,0.5)" letter-spacing="1.5">20 × DRY AIR CONDENSERS</text>
+
+</svg>
+</div>
+
+<!-- FOOTER -->
+<div class="ftr">
+  <div class="ftr-inner">
+    <div>
+      <div class="fhl">20 MechPods.<br><em>Zero Water.</em><br><span>Always.</span></div>
+      <div class="fsub">Bird's eye deployment view — 20 APEX MechPod containers connected to an existing hyperscale AI data center via glycol loops. Dry air condensers reject heat to atmosphere. No cooling tower. No water. No compromise. Patent Pending.</div>
+    </div>
+    <div class="fstats">
+      <div class="fstat"><div class="fval" style="color:#3ECF82;">ZERO</div><div class="flbl">Gallons Water<br>Per Day</div></div>
+      <div class="fstat"><div class="fval" style="color:#5BA8E8;">1.04</div><div class="flbl">Target<br>PUE</div></div>
+      <div class="fstat"><div class="fval" style="color:#FFD600;">54.8MW</div><div class="flbl">Total Cooling<br>Capacity</div></div>
+      <div class="fstat"><div class="fval" style="color:#CC1100;">N+1</div><div class="flbl">Redundancy<br>Standard</div></div>
+    </div>
+    <div class="fspecs">
+      <div class="fspec">Container: <span>40ft ISO High-Cube · Pre-Commissioned</span></div>
+      <div class="fspec">Refrigerant: <span>R-717 Ammonia · GWP=0 · ODP=0</span></div>
+      <div class="fspec">Condenser: <span>Dry Air-Cooled · Zero Water · 113°F Rated</span></div>
+      <div class="fspec">Control: <span>APEX PTC · GPU Scheduler Integration</span></div>
+      <div class="fspec">Scale: <span>5 MW – 500+ MW · Fully Modular</span></div>
+      <div class="fco">APEX Cooling Technologies, LLC · Austin, Texas · EIN 41-5260850<br>Patent Pending · U.S. App. No. 64/055,155 · Filed May 1, 2026</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

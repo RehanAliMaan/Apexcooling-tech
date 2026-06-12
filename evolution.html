@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX — The Data Center Cooling Evolution</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0A1628;--navy2:#0D2B55;--xdk:#060E1A;
+  --red:#CC1100;--orange:#FF4D00;
+  --green:#3ECF82;--dkgreen:#0A7A3E;
+  --blue:#5BA8E8;--ice:#A8D4F5;
+  --gold:#FFD600;--tan:#C8A86A;
+  --white:#F4F8FF;--gray:#8A9BB0;--ltgray:#A8BCCF;
+  --dkgray:#2A3A4A;--yellow:#FFD600;
+  --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--xdk);font-family:'Barlow',sans-serif;color:var(--white);overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--xdk);}
+::-webkit-scrollbar-thumb{background:var(--red);}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(4,10,18,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(204,17,0,0.2);padding:0 48px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-heart{width:32px;height:32px;}
+.nav-brand{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--white);}
+.nav-brand span{color:var(--red);}
+.nav-links{display:flex;align-items:center;gap:24px;}
+.nav-links a{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-cta{background:var(--red)!important;color:var(--white)!important;padding:8px 20px;border-radius:3px;font-weight:700;}
+.nav-cta:hover{background:#AA0E00!important;}
+
+/* ── HERO ── */
+.hero{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 48px 60px;position:relative;overflow:hidden;text-align:center;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,14,26,0.95) 0%,rgba(10,22,40,0.98) 100%);}
+.hero-grid{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(168,212,245,0.015) 60px,rgba(168,212,245,0.015) 61px),repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(168,212,245,0.015) 60px,rgba(168,212,245,0.015) 61px);}
+.hero-glow-l{position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(204,17,0,0.05),transparent 70%);top:-100px;left:-100px;animation:glow 8s ease-in-out infinite;}
+.hero-glow-r{position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(62,207,130,0.05),transparent 70%);bottom:-100px;right:-100px;animation:glow 8s ease-in-out infinite 4s;}
+@keyframes glow{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+.hero-content{position:relative;z-index:2;max-width:900px;}
+
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(204,17,0,0.1);border:1px solid rgba(204,17,0,0.3);border-radius:3px;padding:5px 16px;margin-bottom:24px;animation:fadeUp 0.8s ease both;}
+.hero-eyebrow-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 2s ease-in-out infinite;}
+.hero-eyebrow span{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--red);}
+
+.hero-headline{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,7vw,88px);line-height:0.92;letter-spacing:2px;margin-bottom:20px;animation:fadeUp 0.8s ease 0.1s both;}
+.hero-headline .line2{color:var(--green);}
+.hero-headline .line3{color:var(--white);}
+
+.hero-sub{font-size:clamp(15px,2vw,18px);font-weight:300;color:var(--ice);max-width:700px;margin:0 auto 40px;line-height:1.7;animation:fadeUp 0.8s ease 0.2s both;}
+
+/* Evolution arrow indicator */
+.evolution-indicator{display:flex;align-items:center;gap:12px;justify-content:center;animation:fadeUp 0.8s ease 0.3s both;}
+.evo-step{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;border-radius:3px;}
+.evo-step.s1{background:rgba(204,17,0,0.1);color:var(--red);border:1px solid rgba(204,17,0,0.25);}
+.evo-step.s2{background:rgba(255,214,0,0.1);color:var(--gold);border:1px solid rgba(255,214,0,0.25);}
+.evo-step.s3{background:rgba(62,207,130,0.1);color:var(--green);border:1px solid rgba(62,207,130,0.25);}
+.evo-arrow{font-size:18px;color:var(--gray);}
+
+/* ── THREE COLUMN EVOLUTION ── */
+.evolution-section{padding:80px 32px;position:relative;}
+.evolution-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,212,245,0.15),transparent);}
+
+.col-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;max-width:1400px;margin:0 auto;align-items:start;}
+
+/* Column shared */
+.col{display:flex;flex-direction:column;position:relative;}
+.col-header{padding:28px 24px 20px;text-align:center;position:relative;}
+.col-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}
+.col-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,3vw,34px);line-height:1;margin-bottom:8px;}
+.col-subtitle{font-size:12px;line-height:1.5;}
+.col-body{padding:0 24px 28px;flex:1;}
+
+/* Col 1 — Conventional */
+.col1{background:rgba(204,17,0,0.04);border:1px solid rgba(204,17,0,0.15);border-radius:12px 0 0 12px;}
+.col1 .col-label{color:var(--red);}
+.col1 .col-title{color:var(--white);}
+.col1 .col-subtitle{color:var(--gray);}
+
+/* Col 2 — PFM */
+.col2{background:rgba(255,214,0,0.03);border:1px solid rgba(255,214,0,0.15);border-left:none;border-right:none;position:relative;}
+.col2::before{content:'PARTIAL SOLUTION';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;padding:3px 10px;border-radius:2px;white-space:nowrap;}
+.col2 .col-label{color:var(--gold);}
+.col2 .col-title{color:var(--white);}
+.col2 .col-subtitle{color:var(--gray);}
+
+/* Col 3 — APEX */
+.col3{background:rgba(62,207,130,0.04);border:2px solid rgba(62,207,130,0.3);border-radius:0 12px 12px 0;position:relative;}
+.col3::before{content:'THE COMPLETE SOLUTION';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:var(--navy);font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;padding:3px 10px;border-radius:2px;white-space:nowrap;}
+.col3 .col-label{color:var(--green);}
+.col3 .col-title{color:var(--green);}
+.col3 .col-subtitle{color:var(--ice);}
+
+/* Illustration boxes */
+.col-illustration{margin:0 24px 20px;border-radius:8px;overflow:hidden;position:relative;}
+.illus-inner{padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:180px;text-align:center;position:relative;}
+
+/* Conv illustration - chaotic pipes */
+.illus-conv{background:rgba(204,17,0,0.06);border:1px solid rgba(204,17,0,0.2);}
+.pipe-grid{position:relative;width:160px;height:120px;margin:0 auto 10px;}
+.pipe{position:absolute;background:var(--red);opacity:0.6;border-radius:2px;}
+.illus-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-top:6px;}
+
+/* PFM illustration - container with water tower */
+.illus-pfm{background:rgba(255,214,0,0.06);border:1px solid rgba(255,214,0,0.2);}
+.pfm-container{width:120px;height:60px;background:rgba(255,214,0,0.15);border:2px solid rgba(255,214,0,0.4);border-radius:4px;margin:0 auto 6px;position:relative;display:flex;align-items:center;justify-content:center;}
+.pfm-container-label{font-family:var(--mono);font-size:9px;color:var(--gold);}
+.water-tower{position:absolute;top:-40px;right:-20px;width:36px;height:36px;background:rgba(91,168,232,0.2);border:1px solid rgba(91,168,232,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.warning-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(91,168,232,0.1);border:1px solid rgba(91,168,232,0.3);border-radius:3px;padding:3px 8px;font-family:'Barlow Condensed',sans-serif;font-size:10px;color:var(--blue);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:8px;}
+
+/* APEX illustration - clean container */
+.illus-apex{background:rgba(62,207,130,0.06);border:1px solid rgba(62,207,130,0.2);}
+.apex-container{width:140px;height:60px;background:rgba(62,207,130,0.12);border:2px solid rgba(62,207,130,0.5);border-radius:6px;margin:0 auto 6px;position:relative;display:flex;align-items:center;justify-content:center;}
+.apex-container-label{font-family:var(--mono);font-size:9px;color:var(--green);font-weight:600;}
+.apex-fans{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);display:flex;gap:4px;}
+.apex-fan{width:18px;height:18px;border-radius:50%;border:1px solid rgba(62,207,130,0.4);display:flex;align-items:center;justify-content:center;font-size:10px;animation:spin 4s linear infinite;}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.apex-fan:nth-child(2){animation-delay:-1s;}
+.apex-fan:nth-child(3){animation-delay:-2s;}
+.zero-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(62,207,130,0.1);border:1px solid rgba(62,207,130,0.4);border-radius:3px;padding:3px 8px;font-family:'Barlow Condensed',sans-serif;font-size:10px;color:var(--green);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:24px;}
+
+/* Feature rows */
+.feature-section-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:8px 0 6px;margin-bottom:2px;border-bottom:1px solid rgba(168,212,245,0.08);}
+.col1 .feature-section-title{color:var(--red);}
+.col2 .feature-section-title{color:var(--gold);}
+.col3 .feature-section-title{color:var(--green);}
+
+.feature-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(168,212,245,0.05);}
+.feature-item:last-child{border-bottom:none;}
+.feature-icon{font-size:14px;flex-shrink:0;width:18px;text-align:center;margin-top:1px;}
+.feature-text{font-size:12.5px;line-height:1.5;}
+.feature-text strong{display:block;font-size:11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
+.col1 .feature-text strong{color:var(--red);}
+.col2 .feature-text strong{color:var(--gold);}
+.col3 .feature-text strong{color:var(--green);}
+.col1 .feature-text{color:var(--ltgray);}
+.col2 .feature-text{color:var(--ltgray);}
+.col3 .feature-text{color:var(--ice);}
+
+/* Divider arrow between columns */
+.col-divider{display:flex;align-items:center;justify-content:center;padding-top:80px;}
+.divider-arrow{width:40px;height:40px;border-radius:50%;background:rgba(10,22,40,0.9);border:1px solid rgba(168,212,245,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gray);}
+
+/* Score card at bottom of each col */
+.col-score{margin:16px 24px 24px;padding:16px;border-radius:8px;text-align:center;}
+.col1 .col-score{background:rgba(204,17,0,0.06);border:1px solid rgba(204,17,0,0.15);}
+.col2 .col-score{background:rgba(255,214,0,0.06);border:1px solid rgba(255,214,0,0.15);}
+.col3 .col-score{background:rgba(62,207,130,0.06);border:1px solid rgba(62,207,130,0.25);}
+.score-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.col1 .score-label{color:var(--red);}
+.col2 .score-label{color:var(--gold);}
+.col3 .score-label{color:var(--green);}
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.score-item{text-align:center;}
+.score-val{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;margin-bottom:2px;}
+.col1 .score-val{color:var(--red);}
+.col2 .score-val{color:var(--gold);}
+.col3 .score-val{color:var(--green);}
+.score-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--gray);}
+
+/* ── WHAT APEX ADDS SECTION ── */
+.adds-section{padding:80px 48px;background:var(--navy);position:relative;}
+.adds-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.section-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--green);text-align:center;margin-bottom:10px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,5vw,52px);line-height:1;text-align:center;margin-bottom:12px;}
+.section-sub{font-size:15px;font-weight:300;color:var(--ice);text-align:center;max-width:640px;margin:0 auto 48px;line-height:1.7;}
+
+.adds-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:0 auto;}
+.add-card{background:rgba(13,27,50,0.6);border:1px solid rgba(62,207,130,0.12);border-radius:10px;padding:24px;transition:all 0.3s;}
+.add-card:hover{border-color:rgba(62,207,130,0.3);transform:translateY(-4px);}
+.add-card::before{content:'';display:block;width:100%;height:2px;background:var(--green);margin-bottom:16px;border-radius:1px;}
+.add-icon{font-size:24px;margin-bottom:10px;display:block;}
+.add-title{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--white);margin-bottom:8px;}
+.add-problem{font-size:11px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
+.add-solution{font-size:12.5px;color:var(--ltgray);line-height:1.6;}
+.add-solution strong{color:var(--green);}
+
+/* ── LINKEDIN CALLOUT ── */
+.linkedin-section{padding:80px 48px;background:var(--xdk);position:relative;}
+.linkedin-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,212,245,0.15),transparent);}
+
+.linkedin-box{max-width:800px;margin:0 auto;background:rgba(13,27,50,0.6);border:1px solid rgba(10,102,194,0.3);border-radius:12px;overflow:hidden;}
+.linkedin-header{background:rgba(10,102,194,0.12);padding:16px 24px;border-bottom:1px solid rgba(10,102,194,0.2);display:flex;align-items:center;gap:12px;}
+.linkedin-icon{font-size:24px;}
+.linkedin-header-text{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ice);}
+.linkedin-body{padding:24px;}
+.linkedin-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:10px;}
+.linkedin-comment{font-size:14px;color:var(--white);line-height:1.75;padding:16px;background:rgba(10,22,40,0.8);border-radius:6px;border-left:3px solid rgba(10,102,194,0.5);font-style:italic;}
+.linkedin-note{font-size:11px;color:var(--gray);margin-top:12px;line-height:1.6;padding:10px 14px;background:rgba(255,214,0,0.05);border:1px solid rgba(255,214,0,0.15);border-radius:6px;}
+
+/* ── CTA ── */
+.cta-section{padding:80px 48px;background:var(--navy);text-align:center;position:relative;}
+.cta-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--red),transparent);}
+.cta-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,5vw,56px);line-height:1;margin-bottom:16px;}
+.cta-title span{color:var(--green);}
+.cta-sub{font-size:15px;color:var(--ice);line-height:1.65;margin-bottom:36px;font-weight:300;max-width:580px;margin-left:auto;margin-right:auto;}
+.cta-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.btn-red{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--white);background:var(--red);padding:14px 28px;border-radius:3px;text-decoration:none;transition:all 0.2s;}
+.btn-red:hover{background:#AA0E00;transform:translateY(-2px);}
+.btn-outline{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ice);background:transparent;border:1px solid rgba(168,212,245,0.25);padding:14px 28px;border-radius:3px;text-decoration:none;transition:all 0.2s;}
+.btn-outline:hover{border-color:var(--ice);color:var(--white);}
+
+/* ── FOOTER ── */
+footer{background:#020609;border-top:1px solid rgba(168,212,245,0.06);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;}
+.footer-logo span{color:var(--red);}
+.footer-info{font-size:11px;color:var(--gray);text-align:right;line-height:1.8;}
+
+/* ── PRINT ── */
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  nav{position:relative!important;}
+  body{background:#060E1A!important;}
+  .evolution-section{break-after:page;}
+}
+
+@media(max-width:1000px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .col-grid{grid-template-columns:1fr;}
+  .col1{border-radius:12px 12px 0 0;}
+  .col2{border-left:1px solid rgba(255,214,0,0.15);border-right:1px solid rgba(255,214,0,0.15);}
+  .col3{border-radius:0 0 12px 12px;}
+  .adds-grid{grid-template-columns:1fr;}
+  .evolution-section,.adds-section,.linkedin-section,.cta-section{padding:60px 24px;}
+  .hero{padding:80px 24px 50px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(4,10,18,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(204,17,0,0.2);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#F4F8FF;"><span style="color:#CC1100;">APEX</span> COOLING</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+    <a href="index.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Home</a>
+    <a href="about.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">About</a>
+    <a href="solution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Solution</a>
+    <a href="why-apex.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Why APEX</a>
+    <a href="roi.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">ROI</a>
+    <a href="evolution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Evolution</a>
+    <a href="industry-analysis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Industry</a>
+    <a href="crisis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Crisis</a>
+    <a href="deployment-cover.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Deployment</a>
+    <a href="news.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">News</a>
+    <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Contact</a>
+    <a href="https://apexmechpod.com" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#F4F8FF;background:#CC1100;padding:8px 18px;border-radius:3px;text-decoration:none;">MechPod →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow-l"></div>
+  <div class="hero-glow-r"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><div class="hero-eyebrow-dot"></div><span>Industry Evolution · Data Center Cooling · 2026</span></div>
+    <h1 class="hero-headline">
+      Modular Was Right.<br>
+      <span class="line2">But The Cooling</span><br>
+      <span class="line3">Still Uses Water.</span>
+    </h1>
+    <p class="hero-sub">The shift from conventional retrofits to prefabricated modular data centers is one of the smartest infrastructure decisions of the AI era. APEX takes it one step further — eliminating the last remaining dependency that modular still hasn't solved.</p>
+    <div class="evolution-indicator">
+      <div class="evo-step s1">Conventional Retrofit</div>
+      <div class="evo-arrow">→</div>
+      <div class="evo-step s2">Prefab Modular</div>
+      <div class="evo-arrow">→</div>
+      <div class="evo-step s3">APEX MechPod</div>
+    </div>
+  </div>
+</section>
+
+<!-- THREE COLUMN EVOLUTION -->
+<section class="evolution-section">
+  <div class="col-grid">
+
+    <!-- ── COL 1: CONVENTIONAL ── -->
+    <div class="col col1">
+      <div class="col-header">
+        <div class="col-label">Generation 1</div>
+        <div class="col-title">Conventional Retrofit</div>
+        <div class="col-subtitle">The legacy approach — GPU racks in existing buildings with central cooling plant</div>
+      </div>
+
+      <!-- Illustration -->
+      <div class="col-illustration illus-conv">
+        <div class="illus-inner">
+          <div class="pipe-grid">
+            <div class="pipe" style="width:4px;height:80px;left:20px;top:20px;transform:rotate(15deg);"></div>
+            <div class="pipe" style="width:4px;height:60px;left:50px;top:10px;transform:rotate(-20deg);"></div>
+            <div class="pipe" style="width:80px;height:4px;left:10px;top:60px;transform:rotate(5deg);"></div>
+            <div class="pipe" style="width:60px;height:4px;left:60px;top:40px;transform:rotate(-8deg);"></div>
+            <div class="pipe" style="width:4px;height:50px;left:100px;top:30px;transform:rotate(25deg);"></div>
+            <div class="pipe" style="width:40px;height:4px;left:30px;top:90px;transform:rotate(-12deg);opacity:0.4;"></div>
+            <div class="pipe" style="width:4px;height:40px;left:130px;top:50px;transform:rotate(-18deg);opacity:0.5;"></div>
+          </div>
+          <div style="font-size:11px;color:var(--red);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;font-weight:700;">150m+ Cable & Piping Runs</div>
+        </div>
+      </div>
+
+      <div class="col-body">
+        <div class="feature-section-title">Deployment Problems</div>
+        <div class="feature-item">
+          <div class="feature-icon">❌</div>
+          <div class="feature-text"><strong>Infrastructure Distance</strong>Substation and chillers 150+ meters away — massive cable and piping losses, high CAPEX</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">❌</div>
+          <div class="feature-text"><strong>Building Compromise</strong>Existing building converted to data center — lost for academic or commercial use permanently</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">❌</div>
+          <div class="feature-text"><strong>Disruptive Construction</strong>Months of construction, concrete work, permits, building modifications</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">❌</div>
+          <div class="feature-text"><strong>Inflexible Scaling</strong>Cannot bolt on capacity — must retrofit again for each expansion</div>
+        </div>
+
+        <div class="feature-section-title" style="margin-top:16px;">Cooling Problems</div>
+        <div class="feature-item">
+          <div class="feature-icon">❌</div>
+          <div class="feature-text"><strong>Water Cooling Towers</strong>Millions of gallons per year — chemical treatment, Legionella risk, drought exposure</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">❌</div>
+          <div class="feature-text"><strong>HFC Refrigerants</strong>R-410A, R-32 — AIM Act phase-out begins 2027, stranded asset risk</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">❌</div>
+          <div class="feature-text"><strong>PUE 1.4 — 1.8</strong>40-80% of total power wasted on cooling overhead — not on compute</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">❌</div>
+          <div class="feature-text"><strong>No AI Awareness</strong>Cooling reacts to heat — no integration with GPU workload schedulers</div>
+        </div>
+      </div>
+
+      <div class="col-score">
+        <div class="score-label">Performance at 100 MW</div>
+        <div class="score-grid">
+          <div class="score-item"><div class="score-val">1.5</div><div class="score-lbl">PUE Average</div></div>
+          <div class="score-item"><div class="score-val">530K</div><div class="score-lbl">Gal/Day Water</div></div>
+          <div class="score-item"><div class="score-val">$32M</div><div class="score-lbl">Annual Cost</div></div>
+          <div class="score-item"><div class="score-val">HIGH</div><div class="score-lbl">Reg. Risk</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COL 2: PFM MODULAR ── -->
+    <div class="col col2">
+      <div class="col-header">
+        <div class="col-label">Generation 2</div>
+        <div class="col-title">Prefab Modular (PFM)</div>
+        <div class="col-subtitle">Container deployed near substation — major infrastructure improvement, cooling still unresolved</div>
+      </div>
+
+      <!-- Illustration -->
+      <div class="col-illustration illus-pfm">
+        <div class="illus-inner">
+          <div style="position:relative;margin-bottom:8px;">
+            <div class="pfm-container">
+              <span class="pfm-container-label">PFM MODULE</span>
+              <div class="water-tower" title="Still water-cooled">💧</div>
+            </div>
+          </div>
+          <div class="warning-tag">⚠️ Still Water-Cooled</div>
+          <div style="font-size:10px;color:var(--gray);margin-top:6px;font-style:italic;">Solves the building problem. Not the water problem.</div>
+        </div>
+      </div>
+
+      <div class="col-body">
+        <div class="feature-section-title">Deployment — Solved ✅</div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>Near Substation</strong>Deployed close to power source — dramatically reduced cable and piping runs</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>Building Preserved</strong>Original building stays for academic or commercial use — no conversion required</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>Fast Deployment</strong>Prefabricated module ships complete — significantly faster than conventional retrofit</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>Bolt-On Scaling</strong>Add modules as compute grows — pay-as-you-grow infrastructure model</div>
+        </div>
+
+        <div class="feature-section-title" style="margin-top:16px;">Cooling — Still Unresolved ❌</div>
+        <div class="feature-item">
+          <div class="feature-icon">⚠️</div>
+          <div class="feature-text"><strong>Water-Cooled Chillers on Roof</strong>Module deployment solved — but cooling towers still sit on top consuming water daily. The water problem moved, not eliminated.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">❌</div>
+          <div class="feature-text"><strong>HFC Refrigerants Remain</strong>Standard modular solutions use HFC chillers — same AIM Act regulatory exposure as conventional</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">❌</div>
+          <div class="feature-text"><strong>PUE Still 1.3 — 1.5</strong>Shorter piping runs improve slightly — but cooling system efficiency unchanged</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">❌</div>
+          <div class="feature-text"><strong>No AI Workload Integration</strong>Cooling still reactive — no connection to GPU job schedulers or workload forecasting</div>
+        </div>
+      </div>
+
+      <div class="col-score">
+        <div class="score-label">Performance at 100 MW</div>
+        <div class="score-grid">
+          <div class="score-item"><div class="score-val">1.4</div><div class="score-lbl">PUE Est.</div></div>
+          <div class="score-item"><div class="score-val">400K</div><div class="score-lbl">Gal/Day Water</div></div>
+          <div class="score-item"><div class="score-val">$25M</div><div class="score-lbl">Annual Cost</div></div>
+          <div class="score-item"><div class="score-val">HIGH</div><div class="score-lbl">Reg. Risk</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COL 3: APEX ── -->
+    <div class="col col3">
+      <div class="col-header">
+        <div class="col-label">Generation 3</div>
+        <div class="col-title">APEX MechPod</div>
+        <div class="col-subtitle">Everything modular solved — plus zero water, GWP=0 ammonia, and AI-workload-aware cooling</div>
+      </div>
+
+      <!-- Illustration -->
+      <div class="col-illustration illus-apex">
+        <div class="illus-inner">
+          <div style="position:relative;margin-bottom:8px;">
+            <div class="apex-container">
+              <span class="apex-container-label">APEX MECHPOD</span>
+            </div>
+            <div class="apex-fans">
+              <div class="apex-fan">🌀</div>
+              <div class="apex-fan">🌀</div>
+              <div class="apex-fan">🌀</div>
+            </div>
+          </div>
+          <div class="zero-tag">✅ Zero Water — Always</div>
+          <div style="font-size:10px;color:var(--green);margin-top:6px;font-style:italic;">Dry air. No cooling tower. No water. Ever.</div>
+        </div>
+      </div>
+
+      <div class="col-body">
+        <div class="feature-section-title">Deployment — Fully Solved ✅</div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>Same Modular Advantages</strong>All five PFM advantages preserved — near substation, building preserved, fast deploy, bolt-on scaling, sustainable construction</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>Level Pad + 480V Only</strong>No permanent infrastructure required — compacted gravel pad and power connection is all APEX needs</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>Pre-Commissioned Factory</strong>Arrives fully charged and tested — APEX crew commissions on-site in 1-2 weeks</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>N+1 Redundancy Standard</strong>Dual independent circuits — auto-failover in milliseconds — no single point of failure</div>
+        </div>
+
+        <div class="feature-section-title" style="margin-top:16px;">Cooling — Completely Solved ✅</div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>Zero Water — Always</strong>Dry air-cooled ammonia condensers — no cooling tower ever — zero gallons at any ambient temperature including 113°F Texas summer</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>GWP=0 Ammonia Refrigerant</strong>R-717 — natural refrigerant used safely for 150 years — zero regulatory phase-out risk — AIM Act compliant forever</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>Target PUE 1.04 — 1.08</strong>Ammonia thermodynamics plus AI-predictive control — 94-96 cents of every electricity dollar goes to compute</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text"><strong>AI Workload Intelligence</strong>APEX Control reads GPU job schedulers — pre-cools before workloads ramp — GPU throttle events eliminated entirely</div>
+        </div>
+      </div>
+
+      <div class="col-score" style="border-color:rgba(62,207,130,0.4);">
+        <div class="score-label">Performance at 100 MW</div>
+        <div class="score-grid">
+          <div class="score-item"><div class="score-val">1.06</div><div class="score-lbl">Target PUE</div></div>
+          <div class="score-item"><div class="score-val" style="font-size:18px;">ZERO</div><div class="score-lbl">Gal/Day Water</div></div>
+          <div class="score-item"><div class="score-val">$3.8M</div><div class="score-lbl">Annual Cost</div></div>
+          <div class="score-item"><div class="score-val">NONE</div><div class="score-lbl">Reg. Risk</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /col-grid -->
+
+  <!-- Summary bar -->
+  <div style="max-width:1400px;margin:24px auto 0;padding:20px 24px;background:rgba(62,207,130,0.05);border:1px solid rgba(62,207,130,0.15);border-radius:8px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;justify-content:center;">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);">APEX vs Conventional — Annual Savings at 100 MW:</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);line-height:1;">~$28.7M/yr</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--gray);">Electricity + Water + Chemicals + Maintenance + Refrigerant</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);line-height:1;">~$3.8M/yr</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--gray);">Total APEX operating cost vs $32.5M/yr conventional</div>
+  </div>
+</section>
+
+<!-- WHAT APEX ADDS -->
+<section class="adds-section">
+  <p class="section-eyebrow">The APEX Difference</p>
+  <h2 class="section-title">Three Things PFM Modular Still Doesn't Solve</h2>
+  <p class="section-sub">The modular deployment concept is proven and correct. APEX builds on that foundation and resolves the three remaining problems the industry has not addressed.</p>
+
+  <div class="adds-grid">
+    <div class="add-card">
+      <span class="add-icon">💧</span>
+      <div class="add-title">The Water Problem</div>
+      <div class="add-problem">PFM Still Has: Water-cooled chillers on the module</div>
+      <div class="add-solution">APEX replaces the water-cooled chiller entirely with a dry air-cooled ammonia refrigeration system. <strong>Zero operational water consumption at any ambient temperature.</strong> The cooling tower that moved to the roof of the module — APEX eliminates it permanently. Not 80% less. Not minimal. Zero gallons. Always.</div>
+    </div>
+    <div class="add-card">
+      <span class="add-icon">⚖️</span>
+      <div class="add-title">The Regulatory Problem</div>
+      <div class="add-problem">PFM Still Has: HFC refrigerants facing AIM Act phase-out</div>
+      <div class="add-solution">Standard modular solutions use R-410A or R-32 — synthetic refrigerants that are being phased out under the AIM Act starting 2027. Every HFC-based modular unit installed today is a potential stranded asset within 5-10 years. <strong>APEX uses ammonia R-717 — GWP=0, ODP=0, no PFAS, no phase-out risk. Ever.</strong></div>
+    </div>
+    <div class="add-card">
+      <span class="add-icon">🧠</span>
+      <div class="add-title">The Intelligence Problem</div>
+      <div class="add-problem">PFM Still Has: Reactive cooling with no GPU workload awareness</div>
+      <div class="add-solution">Every modular solution on the market — including PFM — cools reactively. It responds to heat after it happens. <strong>APEX Control reads GPU job schedulers and pre-cools before workloads ramp.</strong> By the time an AI training job hits full power, cooling is already at capacity. GPU throttle events eliminated. PUE 1.04-1.08 achieved.</div>
+    </div>
+  </div>
+</section>
+
+<!-- LINKEDIN CALLOUT -->
+<section class="linkedin-section">
+  <div style="max-width:800px;margin:0 auto;">
+    <p class="section-eyebrow" style="color:rgba(10,102,194,0.8);">LinkedIn Strategy</p>
+    <h2 class="section-title" style="margin-bottom:12px;">How to Enter This Conversation</h2>
+    <p class="section-sub" style="margin-bottom:32px;">The modular data center community is actively discussing this shift. APEX belongs in that conversation — as the next evolution, not a competitor to the concept.</p>
+
+    <div class="linkedin-box">
+      <div class="linkedin-header">
+        <span class="linkedin-icon">💼</span>
+        <span class="linkedin-header-text">Suggested Comment — Post After PPA Filing</span>
+      </div>
+      <div class="linkedin-body">
+        <div class="linkedin-label">Comment on Dinesh Kaya's post — @DineshKaya</div>
+        <div class="linkedin-comment">
+          "Dinesh — great case study. The modular argument is exactly right and your graphic makes it undeniable. One question: in your PFM solution the graphic shows water-cooled chillers on the module roof. As GPU rack density pushes past 100kW per rack and Texas data centers face Stage 3 drought restrictions — what is the next evolution beyond water-cooled modular?<br><br>
+          That is the problem we are working on at APEX Cooling Technologies. Waterless ammonia refrigeration in a 40ft ISO container — same five modular advantages you describe, zero water consumption at any ambient temperature, and AI-workload-aware predictive thermal control that connects directly to GPU job schedulers.<br><br>
+          Would love your perspective on where the industry goes from here."
+        </div>
+        <div class="linkedin-note">
+          ⚠️ <strong>Important:</strong> Post this comment AFTER your PPA is filed and you have Patent Pending status confirmed from Tim. Your filing is imminent — could be days away. Wait for the number, then engage publicly with full confidence.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-title">The Evolution Is <span>Complete.</span></div>
+  <p class="cta-sub">Modular solved the deployment problem. APEX solves the cooling problem. Zero water. GWP=0 refrigerant. AI-native thermal intelligence. The MechPod is the next generation of data center infrastructure.</p>
+  <div class="cta-buttons">
+    <a href="https://apexmechpod.com/quote.html" class="btn-red">⚡ Request Deployment Assessment</a>
+    <a href="https://apexmechpod.com" class="btn-outline">See the MechPod →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>APEX</span> COOLING TECHNOLOGIES</div>
+  <div class="footer-info">APEX Cooling Technologies, LLC · Austin, Texas · Patent Pending · EIN: 41-5260850</div>
+</footer>
+
+</body>
+</html>

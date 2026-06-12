@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX Cooling Technologies — MechPod Hero Visual</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A1628;
+  --navy2: #0D2B55;
+  --orange: #FF4D00;
+  --orange2: #C95C00;
+  --steel: #1E3A5F;
+  --ice: #A8D4F5;
+  --white: #F4F8FF;
+  --gray: #8A9BB0;
+  --green: #00C853;
+  --yellow: #FFD600;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--navy);
+  font-family: 'Barlow', sans-serif;
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HERO SCENE ── */
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  overflow: hidden;
+}
+
+/* Data center grid background */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(13,43,85,0.95) 0%, rgba(10,22,40,0.98) 100%),
+    repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(168,212,245,0.03) 60px, rgba(168,212,245,0.03) 61px),
+    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(168,212,245,0.03) 60px, rgba(168,212,245,0.03) 61px);
+  z-index: 0;
+}
+
+/* Ambient glow */
+.glow-left {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,77,0,0.08) 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+  z-index: 0;
+  animation: pulse 4s ease-in-out infinite;
+}
+.glow-right {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(13,43,85,0.6) 0%, transparent 70%);
+  bottom: -50px;
+  right: -50px;
+  z-index: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* ── TOP BADGE ── */
+.top-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,77,0,0.12);
+  border: 1px solid rgba(255,77,0,0.4);
+  border-radius: 4px;
+  padding: 6px 18px;
+  margin-bottom: 32px;
+  animation: fadeDown 0.8s ease forwards;
+}
+.badge-dot {
+  width: 8px; height: 8px;
+  background: var(--orange);
+  border-radius: 50%;
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.badge-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+/* ── SCENE: DATA CENTER SITE ── */
+.scene {
+  width: 100%;
+  position: relative;
+  margin-bottom: 0;
+  animation: fadeUp 1s ease 0.2s both;
+}
+
+.scene svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 40px 80px rgba(0,0,0,0.8));
+}
+
+/* ── HEADLINE ── */
+.headline-block {
+  text-align: center;
+  margin-top: -20px;
+  animation: fadeUp 1s ease 0.4s both;
+}
+
+.eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 12px;
+}
+
+.headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 8vw, 96px);
+  line-height: 0.92;
+  letter-spacing: 2px;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.headline span {
+  color: var(--orange);
+  display: block;
+}
+
+.subhead {
+  font-size: clamp(15px, 2vw, 19px);
+  font-weight: 300;
+  color: var(--ice);
+  max-width: 640px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+  letter-spacing: 0.3px;
+}
+
+/* ── STAT STRIP ── */
+.stats {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(168,212,245,0.15);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 32px;
+  animation: fadeUp 1s ease 0.6s both;
+}
+
+.stat {
+  padding: 16px 28px;
+  text-align: center;
+  border-right: 1px solid rgba(168,212,245,0.15);
+  flex: 1;
+}
+.stat:last-child { border-right: none; }
+
+.stat-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-lbl {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+/* ── COMING SOON FOOTER ── */
+.coming-soon {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  animation: fadeUp 1s ease 0.8s both;
+}
+
+.cs-line { width: 40px; height: 1px; background: rgba(168,212,245,0.3); }
+
+.cs-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.cs-url {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--orange);
+}
+
+/* ── PATENT PENDING TAG ── */
+.patent-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,214,0,0.08);
+  border: 1px solid rgba(255,214,0,0.3);
+  border-radius: 3px;
+  padding: 5px 14px;
+  margin-top: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SECOND PANEL: PROBLEM ── */
+.problem-panel {
+  width: 100%;
+  background: #060E1A;
+  padding: 80px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.problem-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange), transparent);
+}
+
+.problem-inner {
+  max-width: 1100px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.problem-text h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 0.95;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+
+.problem-text h2 em {
+  color: var(--orange);
+  font-style: normal;
+  display: block;
+}
+
+.problem-text p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ice);
+  font-weight: 300;
+  margin-bottom: 24px;
+}
+
+.problem-numbers {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.prob-num {
+  padding: 20px 24px;
+  border-left: 3px solid var(--orange);
+  background: rgba(255,77,0,0.05);
+  border-radius: 0 6px 6px 0;
+}
+
+.prob-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  color: var(--orange);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.prob-lbl {
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.4;
+}
+
+/* ── THIRD PANEL: HOW IT WORKS ── */
+.how-panel {
+  width: 100%;
+  background: var(--navy);
+  padding: 80px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.how-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(168,212,245,0.3), transparent);
+}
+
+.section-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(32px, 5vw, 56px);
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 48px;
+  line-height: 1;
+}
+
+.layers-grid {
+  max-width: 1100px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.layer {
+  padding: 24px 16px;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  border: 1px solid rgba(168,212,245,0.1);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.layer:hover {
+  transform: translateY(-6px);
+  border-color: var(--orange);
+}
+
+.layer-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  line-height: 1;
+  opacity: 1;
+  position: absolute;
+  top: 6px; right: 10px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+.l1 .layer-num { color: #3ECF82; }
+.l2 .layer-num { color: #5BA8E8; }
+.l3 .layer-num { color: #FF8C42; }
+.l4 .layer-num { color: #B388F0; }
+.l5 .layer-num { color: #3ECFCF; }
+
+.layer-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+
+.layer-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  color: var(--white);
+}
+
+.layer-desc {
+  font-size: 11.5px;
+  color: var(--gray);
+  line-height: 1.5;
+}
+
+.l1 { background: rgba(10,122,62,0.12); }
+.l1 .layer-num { color: #0A7A3E; }
+.l2 { background: rgba(27,95,168,0.12); }
+.l2 .layer-num { color: #1B5FA8; }
+.l3 { background: rgba(201,92,0,0.12); }
+.l3 .layer-num { color: #C95C00; }
+.l4 { background: rgba(91,45,142,0.12); }
+.l4 .layer-num { color: #5B2D8E; }
+.l5 { background: rgba(10,107,107,0.12); }
+.l5 .layer-num { color: #0A6B6B; }
+
+/* ── ZERO WATER CALLOUT ── */
+.zero-callout {
+  width: 100%;
+  background: linear-gradient(135deg, #0A1628 0%, #0D2B55 50%, #0A1628 100%);
+  padding: 60px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(255,77,0,0.3);
+  border-bottom: 1px solid rgba(255,77,0,0.3);
+}
+
+.zero-callout::before {
+  content: 'ZERO';
+  position: absolute;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 300px;
+  color: rgba(255,77,0,0.04);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  letter-spacing: 20px;
+  white-space: nowrap;
+}
+
+.zero-quote {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--white);
+  max-width: 800px;
+  margin: 0 auto 16px;
+  line-height: 1.4;
+  position: relative;
+  z-index: 1;
+}
+
+.zero-quote strong {
+  color: var(--orange);
+  font-style: normal;
+}
+
+.zero-attr {
+  font-size: 13px;
+  color: var(--gray);
+  letter-spacing: 2px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  width: 100%;
+  background: #040A12;
+  padding: 32px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(168,212,245,0.08);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 3px;
+  color: var(--white);
+}
+.footer-logo span { color: var(--orange); }
+
+.footer-info {
+  font-size: 12px;
+  color: var(--gray);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.footer-contact {
+  font-size: 12px;
+  color: var(--gray);
+  text-align: right;
+  line-height: 1.8;
+}
+
+.footer-contact a { color: var(--ice); text-decoration: none; }
+
+/* Heat shimmer animation */
+@keyframes shimmer1 {
+  0%   { transform: translateY(0px);   opacity: 0; }
+  15%  { opacity: 0.7; }
+  85%  { opacity: 0.4; }
+  100% { transform: translateY(-55px); opacity: 0; }
+}
+@keyframes shimmer2 {
+  0%   { transform: translateY(0px);   opacity: 0; }
+  15%  { opacity: 0.6; }
+  85%  { opacity: 0.3; }
+  100% { transform: translateY(-50px); opacity: 0; }
+}
+@keyframes shimmer3 {
+  0%   { transform: translateY(0px);   opacity: 0; }
+  20%  { opacity: 0.5; }
+  80%  { opacity: 0.25; }
+  100% { transform: translateY(-48px); opacity: 0; }
+}
+.air-rise-1 { animation: shimmer1 2.4s ease-in-out infinite; }
+.air-rise-2 { animation: shimmer2 2.8s ease-in-out infinite 0.4s; }
+.air-rise-3 { animation: shimmer3 2.2s ease-in-out infinite 0.8s; }
+.air-rise-4 { animation: shimmer1 2.6s ease-in-out infinite 1.1s; }
+.air-rise-5 { animation: shimmer2 2.3s ease-in-out infinite 0.6s; }
+.air-rise-6 { animation: shimmer3 2.7s ease-in-out infinite 1.4s; }
+.air-rise-7 { animation: shimmer1 2.1s ease-in-out infinite 0.2s; }
+
+</style>
+</head>
+<body>
+
+<!-- Site navigation banner -->
+<div style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(4,10,18,0.98);border-bottom:1px solid rgba(204,17,0,0.3);padding:10px 32px;display:flex;justify-content:space-between;align-items:center;">
+  <a href="index.html" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:#F4F8FF;text-decoration:none;"><span style="color:#CC1100;">APEX</span> COOLING TECHNOLOGIES</a>
+  <div style="display:flex;gap:20px;align-items:center;">
+    <a href="solution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">The Solution</a>
+              <a href="deployment-cover.html" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ltgray,#A8BCCF);text-decoration:none;padding:6px 0;transition:color 0.2s;" onmouseover="this.style.color='#3ECF82'" onmouseout="this.style.color=''">Deployment</a>
+    <a href="about.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">About</a>
+    <a href="https://apexmechpod.com" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">MechPod Site ↗</a>
+    <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#F4F8FF;text-decoration:none;background:#CC1100;padding:7px 16px;border-radius:3px;font-weight:700;">Contact Us</a>
+  </div>
+</div>
+<div style="height:48px;"></div>
+
+
+<!-- ══ HERO PANEL ══════════════════════════════════════════════ -->
+<div class="hero">
+  
+<!-- ══ NAV BAR WITH LOGO ══ -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(4,10,18,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(204,17,0,0.2);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#F4F8FF;"><span style="color:#CC1100;">APEX</span> COOLING</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+    <a href="index.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Home</a>
+    <a href="about.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">About</a>
+    <a href="solution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Solution</a>
+    <a href="why-apex.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Why APEX</a>
+    <a href="roi.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">ROI</a>
+    <a href="evolution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Evolution</a>
+    <a href="industry-analysis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Industry</a>
+    <a href="crisis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Crisis</a>
+    <a href="deployment-cover.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Deployment</a>
+    <a href="news.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">News</a>
+    <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Contact</a>
+    <a href="https://apexmechpod.com" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#F4F8FF;background:#CC1100;padding:8px 18px;border-radius:3px;text-decoration:none;">MechPod →</a>
+  </div>
+</nav>
+
+<!-- Spacer for fixed nav -->
+<div style="height:64px;"></div>
+
+<div class="glow-left"></div>
+  <div class="glow-right"></div>
+
+  <div class="content">
+
+    <!-- Status badge -->
+    <div class="top-badge" style="margin-top:8px;">
+      <div class="badge-dot"></div>
+      <span class="badge-text">Now Deploying Across Texas  ·  Zero Water  ·  GWP = 0</span>
+    </div>
+
+
+    <!-- Full logo lockup centered above container -->
+    <div style="display:flex; justify-content:center; margin-bottom:20px; animation: fadeDown 0.8s ease both;">
+      <div style="transform:scale(0.75); transform-origin:center;">
+<svg style="filter:drop-shadow(0 4px 20px rgba(0,0,0,0.4));" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 220" width="580" height="220">
+  <defs>
+    <linearGradient id="hot-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E8451A"/>
+      <stop offset="60%" stop-color="#C43010"/>
+      <stop offset="100%" stop-color="#8B1A00"/>
+    </linearGradient>
+    <linearGradient id="cold-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4A90D9"/>
+      <stop offset="60%" stop-color="#1B5FA8"/>
+      <stop offset="100%" stop-color="#0D3A70"/>
+    </linearGradient>
+    <linearGradient id="flame-grad" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#FF6B00"/>
+      <stop offset="50%" stop-color="#FFB300"/>
+      <stop offset="100%" stop-color="#FFE066"/>
+    </linearGradient>
+    <linearGradient id="ice-grad" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#A8D4F5"/>
+      <stop offset="100%" stop-color="#E8F4FF"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ── HEART — hot left side ── -->
+  <path d="M110,175 C110,175 45,130 35,100 C25,70 30,45 50,38 C70,31 90,45 110,70 Z" fill="url(#hot-grad)"/>
+  <!-- Heart top left bump -->
+  <ellipse cx="75" cy="58" rx="35" ry="30" fill="url(#hot-grad)"/>
+
+  <!-- ── HEART — cold right side ── -->
+  <path d="M110,175 C110,175 175,130 185,100 C195,70 190,45 170,38 C150,31 130,45 110,70 Z" fill="url(#cold-grad)"/>
+  <!-- Heart top right bump -->
+  <ellipse cx="145" cy="58" rx="35" ry="30" fill="url(#cold-grad)"/>
+
+  <!-- Center dividing line -->
+  <line x1="110" y1="26" x2="110" y2="175" stroke="#0D2B55" stroke-width="3"/>
+
+  <!-- ── FLAME ── -->
+  <path d="M88,42 C82,28 78,18 85,8 C88,3 90,0 88,0 C84,-2 76,6 74,14 C70,8 72,2 76,-2 C72,0 64,10 66,22 C60,16 62,8 66,4 C60,8 54,18 58,30 C54,28 52,20 54,14 C48,22 46,34 52,44 C56,52 66,56 76,54 C86,52 92,46 88,42 Z"
+    fill="url(#flame-grad)" transform="translate(16,14) scale(0.88)"/>
+  <path d="M88,38 C84,28 82,22 86,14 C82,18 78,26 80,34 C76,30 76,22 80,18 C74,24 72,34 76,42 C78,46 84,48 88,44 C90,40 90,38 88,38 Z"
+    fill="#FFE066" opacity="0.65" transform="translate(16,14) scale(0.88)"/>
+
+  <!-- ── ICE SHARDS ── -->
+  <path d="M118,42 L124,20 L130,42 Z" fill="url(#ice-grad)" opacity="0.9"/>
+  <path d="M130,46 L138,18 L146,46 Z" fill="url(#ice-grad)" opacity="0.85"/>
+  <path d="M142,48 L149,26 L156,48 Z" fill="url(#ice-grad)" opacity="0.75"/>
+  <!-- Frost sparkles -->
+  <circle cx="126" cy="16" r="2.5" fill="#E8F4FF" opacity="0.9"/>
+  <circle cx="142" cy="14" r="2" fill="#E8F4FF" opacity="0.85"/>
+  <circle cx="156" cy="22" r="1.5" fill="#E8F4FF" opacity="0.7"/>
+  <!-- Snowflake cross -->
+  <line x1="134" y1="10" x2="134" y2="20" stroke="#E8F4FF" stroke-width="1.8" opacity="0.85"/>
+  <line x1="129" y1="15" x2="139" y2="15" stroke="#E8F4FF" stroke-width="1.8" opacity="0.85"/>
+  <line x1="131" y1="12" x2="137" y2="18" stroke="#E8F4FF" stroke-width="1" opacity="0.5"/>
+  <line x1="137" y1="12" x2="131" y2="18" stroke="#E8F4FF" stroke-width="1" opacity="0.5"/>
+
+  <!-- ── ICE BUBBLES ── -->
+  <circle cx="150" cy="90" r="10" fill="rgba(232,244,255,0.22)" stroke="#A8D4F5" stroke-width="1"/>
+  <circle cx="164" cy="118" r="7" fill="rgba(232,244,255,0.18)" stroke="#A8D4F5" stroke-width="0.8"/>
+  <circle cx="148" cy="132" r="5" fill="rgba(232,244,255,0.14)" stroke="#A8D4F5" stroke-width="0.8"/>
+  <circle cx="146" cy="87" r="3" fill="white" opacity="0.25"/>
+
+  <!-- ── HOT badge ── -->
+  <rect x="86" y="100" width="30" height="17" rx="3" fill="#CC1100"/>
+  <text x="101" y="112" text-anchor="middle" font-family="Arial" font-size="9" font-weight="700" fill="white" letter-spacing="1">HOT</text>
+
+  <!-- ── THE PROBLEM | THE SOLUTION ── -->
+  <text x="56" y="196" text-anchor="middle" font-family="Arial" font-size="9" font-weight="700" fill="#FF6020" letter-spacing="0.8">THE PROBLEM</text>
+  <text x="110" y="196" text-anchor="middle" font-family="Arial" font-size="9" fill="rgba(255,255,255,0.3)">|</text>
+  <text x="164" y="196" text-anchor="middle" font-family="Arial" font-size="9" font-weight="700" fill="#5BA8E8" letter-spacing="0.8">THE SOLUTION</text>
+
+  <!-- ── DIVIDER LINE between logo and wordmark ── -->
+  <line x1="210" y1="30" x2="210" y2="185" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+
+  <!-- ── WORDMARK ── -->
+  <!-- APEX -->
+  <text x="228" y="105" font-family="Arial Black, Arial" font-size="62" font-weight="900" fill="#F4F8FF" letter-spacing="-1">APEX</text>
+  <!-- COOLING TECHNOLOGIES -->
+  <text x="230" y="124" font-family="Arial" font-size="11.5" font-weight="400" fill="#A8BCCF" letter-spacing="5.5">COOLING TECHNOLOGIES</text>
+  <!-- Taglines -->
+  <text x="230" y="150" font-family="Arial" font-size="13" font-weight="700" fill="#FF6020">The heat crisis is real.</text>
+  <text x="230" y="169" font-family="Arial" font-size="13" font-weight="700" fill="#5BA8E8">The solution is ammonia.</text>
+  <!-- Zero water line -->
+  <text x="230" y="186" font-family="Arial" font-size="11" fill="#3ECF82" letter-spacing="0.3">Zero water  ·  GWP = 0  ·  AI-native</text>
+
+</svg>
+
+      </div>
+    </div>
+
+    <!-- Container Scene SVG -->
+    <div class="scene">
+      <svg viewBox="0 0 1200 520" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#050D1A"/>
+            <stop offset="100%" stop-color="#0A1E38"/>
+          </linearGradient>
+          <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0D1F35"/>
+            <stop offset="100%" stop-color="#060E1A"/>
+          </linearGradient>
+          <linearGradient id="container-side" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#E8D5B0"/>
+            <stop offset="40%" stop-color="#D4BC8E"/>
+            <stop offset="100%" stop-color="#B89E72"/>
+          </linearGradient>
+          <linearGradient id="container-top" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#F0DFC0"/>
+            <stop offset="100%" stop-color="#C8AA7A"/>
+          </linearGradient>
+          <linearGradient id="condenser-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#0A1628"/>
+            <stop offset="50%" stop-color="#0F2545"/>
+            <stop offset="100%" stop-color="#0A1628"/>
+          </linearGradient>
+          <filter id="glow-orange">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-soft">
+            <feGaussianBlur stdDeviation="8" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <clipPath id="scene-clip">
+            <rect width="1200" height="520"/>
+          </clipPath>
+        </defs>
+
+        <g clip-path="url(#scene-clip)">
+
+        <!-- Sky -->
+        <rect width="1200" height="520" fill="url(#sky)"/>
+
+        <!-- Stars -->
+        <circle cx="80" cy="40" r="1" fill="white" opacity="0.4"/>
+        <circle cx="180" cy="25" r="1.5" fill="white" opacity="0.3"/>
+        <circle cx="320" cy="55" r="1" fill="white" opacity="0.5"/>
+        <circle cx="450" cy="30" r="1" fill="white" opacity="0.3"/>
+        <circle cx="600" cy="20" r="1.5" fill="white" opacity="0.4"/>
+        <circle cx="750" cy="45" r="1" fill="white" opacity="0.3"/>
+        <circle cx="900" cy="28" r="1" fill="white" opacity="0.5"/>
+        <circle cx="1050" cy="38" r="1.5" fill="white" opacity="0.3"/>
+        <circle cx="1150" cy="20" r="1" fill="white" opacity="0.4"/>
+
+        <!-- Data center building in background -->
+        <rect x="50" y="160" width="300" height="220" fill="#071525" stroke="#0D2B55" stroke-width="1"/>
+        <rect x="50" y="160" width="300" height="8" fill="#0D2B55"/>
+        <!-- Building windows -->
+        <rect x="70" y="185" width="35" height="20" fill="#0A3060" opacity="0.8"/>
+        <rect x="120" y="185" width="35" height="20" fill="#0A4080" opacity="0.6"/>
+        <rect x="170" y="185" width="35" height="20" fill="#0A3060" opacity="0.8"/>
+        <rect x="220" y="185" width="35" height="20" fill="#0A5090" opacity="0.9"/>
+        <rect x="270" y="185" width="35" height="20" fill="#0A3060" opacity="0.7"/>
+        <rect x="70" y="220" width="35" height="20" fill="#0A4080" opacity="0.9"/>
+        <rect x="120" y="220" width="35" height="20" fill="#0A3060" opacity="0.6"/>
+        <rect x="170" y="220" width="35" height="20" fill="#0A5090" opacity="0.8"/>
+        <rect x="220" y="220" width="35" height="20" fill="#0A3060" opacity="0.7"/>
+        <rect x="270" y="220" width="35" height="20" fill="#0A4080" opacity="0.9"/>
+        <rect x="70" y="255" width="35" height="20" fill="#0A3060" opacity="0.5"/>
+        <rect x="120" y="255" width="35" height="20" fill="#0A5090" opacity="0.8"/>
+        <rect x="170" y="255" width="35" height="20" fill="#0A4080" opacity="0.7"/>
+        <rect x="220" y="255" width="35" height="20" fill="#0A3060" opacity="0.9"/>
+        <rect x="270" y="255" width="35" height="20" fill="#0A5090" opacity="0.6"/>
+        <!-- Building label -->
+        <text x="200" y="350" text-anchor="middle" font-family="Barlow Condensed" font-size="13" fill="#5BAEF0" letter-spacing="3" font-weight="700">DATA CENTER</text>
+
+        <!-- Second building right -->
+        <rect x="880" y="200" width="260" height="180" fill="#071525" stroke="#0D2B55" stroke-width="1"/>
+        <rect x="880" y="200" width="260" height="8" fill="#0D2B55"/>
+        <rect x="900" y="225" width="30" height="18" fill="#0A3060" opacity="0.8"/>
+        <rect x="945" y="225" width="30" height="18" fill="#0A5090" opacity="0.9"/>
+        <rect x="990" y="225" width="30" height="18" fill="#0A3060" opacity="0.7"/>
+        <rect x="1035" y="225" width="30" height="18" fill="#0A4080" opacity="0.8"/>
+        <rect x="1080" y="225" width="30" height="18" fill="#0A3060" opacity="0.6"/>
+        <rect x="900" y="258" width="30" height="18" fill="#0A4080" opacity="0.9"/>
+        <rect x="945" y="258" width="30" height="18" fill="#0A3060" opacity="0.7"/>
+        <rect x="990" y="258" width="30" height="18" fill="#0A5090" opacity="0.8"/>
+        <rect x="1035" y="258" width="30" height="18" fill="#0A3060" opacity="0.9"/>
+        <rect x="1080" y="258" width="30" height="18" fill="#0A4080" opacity="0.7"/>
+
+        <!-- Dry condensers on roof of building (right side) -->
+        <rect x="900" y="185" width="50" height="18" rx="2" fill="#0D2A40" stroke="#1B5FA8" stroke-width="0.5"/>
+        <rect x="960" y="185" width="50" height="18" rx="2" fill="#0D2A40" stroke="#1B5FA8" stroke-width="0.5"/>
+        <rect x="1020" y="185" width="50" height="18" rx="2" fill="#0D2A40" stroke="#1B5FA8" stroke-width="0.5"/>
+        <rect x="1080" y="185" width="50" height="18" rx="2" fill="#0D2A40" stroke="#1B5FA8" stroke-width="0.5"/>
+        <!-- Fan circles on condensers -->
+        <circle cx="925" cy="194" r="6" fill="none" stroke="#1B5FA8" stroke-width="0.8" opacity="0.6"/>
+        <circle cx="985" cy="194" r="6" fill="none" stroke="#1B5FA8" stroke-width="0.8" opacity="0.6"/>
+        <circle cx="1045" cy="194" r="6" fill="none" stroke="#1B5FA8" stroke-width="0.8" opacity="0.6"/>
+        <circle cx="1105" cy="194" r="6" fill="none" stroke="#1B5FA8" stroke-width="0.8" opacity="0.6"/>
+        <!-- NO STEAM label -->
+        <text x="1010" y="178" text-anchor="middle" font-family="Barlow Condensed" font-size="11" fill="#00E864" letter-spacing="1.5" font-weight="700">DRY — NO WATER</text>
+
+        <!-- Ground -->
+        <rect x="0" y="380" width="1200" height="140" fill="url(#ground)"/>
+        <!-- Ground line -->
+        <line x1="0" y1="380" x2="1200" y2="380" stroke="#0D2B55" stroke-width="1"/>
+        <!-- Concrete pad under container -->
+        <rect x="280" y="372" width="646" height="12" rx="2" fill="#0A1E38"/>
+
+        <!-- ══ THE APEX MECHPOD CONTAINER ══ -->
+        <!-- Container shadow -->
+        <ellipse cx="605" cy="395" rx="310" ry="20" fill="rgba(0,0,0,0.6)"/>
+
+        <!-- Container body - main side panel -->
+        <rect x="288" y="192" width="630" height="186" fill="url(#container-side)" rx="2"/>
+
+        <!-- Container corrugation lines (vertical ribs) -->
+        <line x1="340" y1="192" x2="340" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="380" y1="192" x2="380" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="420" y1="192" x2="420" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="460" y1="192" x2="460" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="500" y1="192" x2="500" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="540" y1="192" x2="540" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="580" y1="192" x2="580" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="620" y1="192" x2="620" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="660" y1="192" x2="660" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="700" y1="192" x2="700" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="740" y1="192" x2="740" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="780" y1="192" x2="780" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="820" y1="192" x2="820" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+        <line x1="860" y1="192" x2="860" y2="378" stroke="#9A8455" stroke-width="2" opacity="0.45"/>
+
+        <!-- Container top -->
+        <rect x="284" y="178" width="638" height="17" fill="url(#container-top)" rx="2"/>
+        <!-- Top edge highlight -->
+        <line x1="284" y1="178" x2="922" y2="178" stroke="#F5E8CC" stroke-width="2" opacity="0.7"/>
+
+        <!-- Container bottom rail -->
+        <rect x="284" y="375" width="638" height="10" fill="#7A6040"/>
+
+        <!-- Container corner posts -->
+        <rect x="284" y="178" width="10" height="207" fill="#6A5030"/>
+        <rect x="912" y="178" width="10" height="207" fill="#6A5030"/>
+
+        <!-- Orange accent stripe top -->
+        <rect x="294" y="193" width="614" height="8" fill="#CC1100" opacity="0.95"/>
+
+        <!-- Orange accent stripe bottom -->
+        <rect x="294" y="364" width="614" height="8" fill="#CC1100" opacity="0.95"/>
+
+        <!-- ══ APEX LOGO ON CONTAINER ══ -->
+        <!-- Logo background glow -->
+        <rect x="360" y="215" width="420" height="140" rx="4" fill="rgba(255,255,255,0.06)"/>
+
+        <!-- APEX text - BIG -->
+        <text x="570" y="320" text-anchor="middle"
+          font-family="Bebas Neue, sans-serif"
+          font-size="110"
+          font-weight="400"
+          fill="#CC1100"
+          letter-spacing="14"
+          filter="url(#glow-orange)"
+          opacity="1">APEX</text>
+
+        <!-- Tagline under APEX -->
+        <text x="570" y="348" text-anchor="middle"
+          font-family="Barlow Condensed, sans-serif"
+          font-size="14"
+          font-weight="700"
+          fill="rgba(30,15,0,0.9)"
+          letter-spacing="3"
+          opacity="1">AI-NATIVE PHASE-CHANGE EXCHANGE  ·  WATERLESS COOLING</text>
+
+        <!-- MECHPOD label -->
+        <text x="570" y="228" text-anchor="middle"
+          font-family="Barlow Condensed, sans-serif"
+          font-size="17"
+          font-weight="700"
+          fill="rgba(50,30,0,0.85)"
+          letter-spacing="6">MECHPOD  40HC-D</text>
+
+        <!-- PATENT PENDING badge on container -->
+        <rect x="755" y="350" width="150" height="19" rx="2" fill="rgba(0,0,0,0.15)" stroke="#CC1100" stroke-width="0.8"/>
+        <text x="830" y="363" text-anchor="middle"
+          font-family="Barlow Condensed, sans-serif"
+          font-size="11"
+          font-weight="700"
+          fill="#CC1100"
+          letter-spacing="2">PATENT PENDING</text>
+
+        <!-- APEX Cooling Technologies LLC label -->
+        <text x="430" y="362" text-anchor="middle"
+          font-family="Barlow Condensed, sans-serif"
+          font-size="11"
+          fill="rgba(30,15,0,0.75)"
+          letter-spacing="1.5">APEX COOLING TECHNOLOGIES LLC  ·  AUSTIN, TX</text>
+
+        <!-- Door details (right end) -->
+        <line x1="870" y1="200" x2="870" y2="376" stroke="#8A7040" stroke-width="2"/>
+        <line x1="892" y1="200" x2="892" y2="376" stroke="#8A7040" stroke-width="2"/>
+
+        <!-- APEX Logo badge on end door -->
+        <g transform="translate(853, 240) scale(0.13)">
+          <!-- Tiny heart mark -->
+          <path d="M110,175 C110,175 45,130 35,100 C25,70 30,45 50,38 C70,31 90,45 110,70 Z" fill="#CC3300"/>
+          <ellipse cx="75" cy="58" rx="35" ry="30" fill="#CC3300"/>
+          <path d="M110,175 C110,175 175,130 185,100 C195,70 190,45 170,38 C150,31 130,45 110,70 Z" fill="#1B5FA8"/>
+          <ellipse cx="145" cy="58" rx="35" ry="30" fill="#1B5FA8"/>
+          <line x1="110" y1="26" x2="110" y2="175" stroke="#EDD9A3" stroke-width="4"/>
+        </g>
+        <text x="872" y="270" text-anchor="middle"
+          font-family="Bebas Neue, sans-serif" font-size="8" fill="#EDD9A3" letter-spacing="1.5">APEX</text>
+        <text x="872" y="279" text-anchor="middle"
+          font-family="Barlow Condensed, sans-serif" font-size="5.5" fill="rgba(237,217,163,0.6)" letter-spacing="1">COOLING TECH</text>
+
+        <!-- Dry condenser units on top of container -->
+        <rect x="310" y="168" width="80" height="18" rx="2" fill="#0D2030" stroke="#1B5FA8" stroke-width="0.8"/>
+        <rect x="400" y="168" width="80" height="18" rx="2" fill="#0D2030" stroke="#1B5FA8" stroke-width="0.8"/>
+        <rect x="490" y="168" width="80" height="18" rx="2" fill="#0D2030" stroke="#1B5FA8" stroke-width="0.8"/>
+        <rect x="580" y="168" width="80" height="18" rx="2" fill="#0D2030" stroke="#1B5FA8" stroke-width="0.8"/>
+        <rect x="670" y="168" width="80" height="18" rx="2" fill="#0D2030" stroke="#1B5FA8" stroke-width="0.8"/>
+        <rect x="760" y="168" width="80" height="18" rx="2" fill="#0D2030" stroke="#1B5FA8" stroke-width="0.8"/>
+        <rect x="820" y="168" width="80" height="18" rx="2" fill="#0D2030" stroke="#1B5FA8" stroke-width="0.8"/>
+        <!-- Fan blades on condensers -->
+        <circle cx="350" cy="177" r="5" fill="none" stroke="#1B5FA8" stroke-width="0.8" opacity="0.7"/>
+        <circle cx="440" cy="177" r="5" fill="none" stroke="#1B5FA8" stroke-width="0.8" opacity="0.7"/>
+        <circle cx="530" cy="177" r="5" fill="none" stroke="#1B5FA8" stroke-width="0.8" opacity="0.7"/>
+        <circle cx="620" cy="177" r="5" fill="none" stroke="#1B5FA8" stroke-width="0.8" opacity="0.7"/>
+        <circle cx="710" cy="177" r="5" fill="none" stroke="#1B5FA8" stroke-width="0.8" opacity="0.7"/>
+        <circle cx="800" cy="177" r="5" fill="none" stroke="#1B5FA8" stroke-width="0.8" opacity="0.7"/>
+        <circle cx="860" cy="177" r="5" fill="none" stroke="#1B5FA8" stroke-width="0.8" opacity="0.7"/>
+
+
+        <!-- ══ HEAT SHIMMER / DRY AIR RISING FROM CONDENSERS ══ -->
+
+        <!-- Condenser 1: x=310-390, center=350 -->
+        <path class="air-rise-1" d="M344,168 C342,160 348,154 344,146 C340,138 346,132 344,124" fill="none" stroke="rgba(200,230,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+        <path class="air-rise-2" d="M356,168 C358,159 352,153 356,145 C360,137 354,131 356,123" fill="none" stroke="rgba(200,230,255,0.6)" stroke-width="1.2" stroke-linecap="round"/>
+
+        <!-- Condenser 2: x=400-480, center=440 -->
+        <path class="air-rise-3" d="M434,168 C432,160 438,153 434,145 C430,137 436,130 434,122" fill="none" stroke="rgba(200,230,255,0.65)" stroke-width="1.5" stroke-linecap="round"/>
+        <path class="air-rise-4" d="M446,168 C448,159 442,152 446,144 C450,136 444,129 446,121" fill="none" stroke="rgba(200,230,255,0.55)" stroke-width="1.2" stroke-linecap="round"/>
+
+        <!-- Condenser 3: x=490-570, center=530 -->
+        <path class="air-rise-5" d="M524,168 C522,159 528,152 524,144 C520,136 526,129 524,121" fill="none" stroke="rgba(200,230,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+        <path class="air-rise-6" d="M536,168 C538,160 532,153 536,145 C540,137 534,130 536,122" fill="none" stroke="rgba(200,230,255,0.5)" stroke-width="1.2" stroke-linecap="round"/>
+
+        <!-- Condenser 4: x=580-660, center=620 -->
+        <path class="air-rise-7" d="M614,168 C612,159 618,152 614,144 C610,136 616,129 614,121" fill="none" stroke="rgba(200,230,255,0.65)" stroke-width="1.5" stroke-linecap="round"/>
+        <path class="air-rise-1" d="M626,168 C628,160 622,153 626,145 C630,137 624,130 626,122" fill="none" stroke="rgba(200,230,255,0.55)" stroke-width="1.2" stroke-linecap="round"/>
+
+        <!-- Condenser 5: x=670-750, center=710 -->
+        <path class="air-rise-2" d="M704,168 C702,159 708,152 704,144 C700,136 706,129 704,121" fill="none" stroke="rgba(200,230,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+        <path class="air-rise-3" d="M716,168 C718,160 712,153 716,145 C720,137 714,130 716,122" fill="none" stroke="rgba(200,230,255,0.5)" stroke-width="1.2" stroke-linecap="round"/>
+
+        <!-- Condenser 6: x=760-840, center=800 -->
+        <path class="air-rise-4" d="M794,168 C792,159 798,152 794,144 C790,136 796,129 794,121" fill="none" stroke="rgba(200,230,255,0.65)" stroke-width="1.5" stroke-linecap="round"/>
+        <path class="air-rise-5" d="M806,168 C808,160 802,153 806,145 C810,137 804,130 806,122" fill="none" stroke="rgba(200,230,255,0.55)" stroke-width="1.2" stroke-linecap="round"/>
+
+        <!-- Condenser 7: x=820-900, center=860 -->
+        <path class="air-rise-6" d="M854,168 C852,159 858,152 854,144 C850,136 856,129 854,121" fill="none" stroke="rgba(200,230,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+        <path class="air-rise-7" d="M866,168 C868,160 862,153 866,145 C870,137 864,130 866,122" fill="none" stroke="rgba(200,230,255,0.45)" stroke-width="1.2" stroke-linecap="round"/>
+
+        <!-- Right building condensers — air rising too -->
+        <path class="air-rise-1" d="M919,185 C917,177 923,170 919,162" fill="none" stroke="rgba(200,230,255,0.5)" stroke-width="1" stroke-linecap="round"/>
+        <path class="air-rise-3" d="M979,185 C977,177 983,170 979,162" fill="none" stroke="rgba(200,230,255,0.5)" stroke-width="1" stroke-linecap="round"/>
+        <path class="air-rise-5" d="M1039,185 C1037,177 1043,170 1039,162" fill="none" stroke="rgba(200,230,255,0.5)" stroke-width="1" stroke-linecap="round"/>
+        <path class="air-rise-7" d="M1099,185 C1097,177 1103,170 1099,162" fill="none" stroke="rgba(200,230,255,0.5)" stroke-width="1" stroke-linecap="round"/>
+
+        <!-- NO WATER / NO STEAM label above condensers -->
+        <text x="570" y="162" text-anchor="middle"
+          font-family="Barlow Condensed, sans-serif"
+          font-size="12"
+          font-weight="700"
+          fill="#00E864"
+          letter-spacing="3">▲ DRY AIR CONDENSERS — ZERO WATER CONSUMED ▲</text>
+
+        <!-- Glycol pipe connection to building -->
+        <!-- GLYCOL LOOP — Green = cold out, Red = hot return -->
+        <!-- Route pipes to the LEFT of the APEX lettering — down the left end of container -->
+
+        <!-- COLD supply: down left side of container, then across to building -->
+        <!-- Vertical down left end -->
+        <line x1="296" y1="285" x2="296" y2="355" stroke="#3ECF82" stroke-width="3" stroke-dasharray="8,4"/>
+        <!-- Horizontal left to building -->
+        <line x1="296" y1="355" x2="200" y2="355" stroke="#3ECF82" stroke-width="3" stroke-dasharray="8,4"/>
+        <!-- Vertical down into building -->
+        <line x1="200" y1="355" x2="200" y2="385" stroke="#3ECF82" stroke-width="3" stroke-dasharray="8,4" marker-end="url(#arr-glycol)"/>
+
+        <!-- HOT return: up from building, across, back up into container -->
+        <!-- Vertical up from building -->
+        <line x1="215" y1="385" x2="215" y2="340" stroke="#FF4444" stroke-width="3" stroke-dasharray="8,4"/>
+        <!-- Horizontal right to container -->
+        <line x1="215" y1="340" x2="296" y2="340" stroke="#FF4444" stroke-width="3" stroke-dasharray="8,4"/>
+        <!-- Vertical up into container -->
+        <line x1="296" y1="340" x2="296" y2="270" stroke="#FF4444" stroke-width="3" stroke-dasharray="8,4" marker-end="url(#arr-glycol-hot)"/>
+
+        <!-- GLYCOL label — solid green badge -->
+        <rect x="140" y="270" width="128" height="52" rx="5" fill="#0A1E38"/>
+        <rect x="140" y="270" width="128" height="52" rx="5" fill="none" stroke="rgba(168,212,245,0.3)" stroke-width="1"/>
+        <!-- Cold supply label -->
+        <rect x="145" y="275" width="10" height="10" rx="2" fill="#3ECF82"/>
+        <text x="162" y="284" font-family="Barlow Condensed" font-size="11"
+          fill="#3ECF82" letter-spacing="1" font-weight="700">COLD — TO GPU RACKS</text>
+        <!-- Hot return label -->
+        <rect x="145" y="293" width="10" height="10" rx="2" fill="#FF4444"/>
+        <text x="162" y="302" font-family="Barlow Condensed" font-size="11"
+          fill="#FF4444" letter-spacing="1" font-weight="700">HOT — RETURN LOOP</text>
+        <!-- Closed loop note -->
+        <text x="204" y="316" text-anchor="middle" font-family="Barlow Condensed" font-size="9"
+          fill="rgba(168,212,245,0.6)" letter-spacing="1">CLOSED LOOP — ZERO WATER</text>
+
+        <!-- Starlink dish on container -->
+        <ellipse cx="895" cy="208" rx="10" ry="4" fill="none" stroke="#A8D4F5" stroke-width="1" opacity="0.6"/>
+        <line x1="895" y1="208" x2="895" y2="220" stroke="#A8D4F5" stroke-width="1" opacity="0.5"/>
+        <text x="895" y="170" text-anchor="middle" font-family="Barlow Condensed" font-size="12" fill="#FFFFFF" letter-spacing="1.5" opacity="1" font-weight="700">STARLINK</text>
+
+        <!-- Signal waves from Starlink -->
+        <path d="M875,196 Q895,188 915,196" fill="none" stroke="#A8D4F5" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.4"/>
+        <path d="M868,190 Q895,180 922,190" fill="none" stroke="#A8D4F5" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.25"/>
+
+        <!-- 24/7 MONITORED label -->
+        <text x="895" y="148" text-anchor="middle" font-family="Barlow Condensed" font-size="14" fill="#FFFFFF" letter-spacing="2" opacity="1" font-weight="700">24/7 MONITORED</text>
+        <text x="895" y="162" text-anchor="middle" font-family="Barlow Condensed" font-size="14" fill="#FFFFFF" letter-spacing="2" opacity="1" font-weight="700">AUSTIN HQ</text>
+
+        <!-- Ground elements: gravel/concrete pad markings -->
+        <line x1="295" y1="385" x2="915" y2="385" stroke="#0A2040" stroke-width="0.5" opacity="0.5"/>
+        <line x1="295" y1="390" x2="915" y2="390" stroke="#0A2040" stroke-width="0.5" opacity="0.3"/>
+
+        <!-- 480V power connection -->
+        <line x1="860" y1="378" x2="860" y2="420" stroke="#FFD600" stroke-width="2"/>
+        <rect x="845" y="418" width="30" height="12" rx="2" fill="#1A1A00" stroke="#FFD600" stroke-width="1"/>
+        <text x="860" y="428" text-anchor="middle" font-family="Barlow Condensed" font-size="9" fill="#FFD600" letter-spacing="1" font-weight="700">480V</text>
+
+        <!-- COMING SOON TO YOUR SITE text on ground -->
+        <text x="570" y="410" text-anchor="middle"
+          font-family="Barlow Condensed, sans-serif"
+          font-size="13"
+          font-weight="600"
+          fill="rgba(220,235,255,0.65)"
+          letter-spacing="6">COMING SOON TO A DATA CENTER NEAR YOU</text>
+
+        </g>
+      </svg>
+    </div>
+
+    <!-- Headline -->
+    <div class="headline-block">
+      <p class="eyebrow">APEX Cooling Technologies, LLC  ·  Austin, Texas</p>
+      <h1 class="headline">
+        The Cooling Tower
+        <span>Replacement</span>
+      </h1>
+      <p class="subhead">
+        The glycol never leaves. The ammonia never leaves.
+        The only thing that leaves is dry air —
+        and dry air doesn't come from an aquifer.
+      </p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-val" style="color:#00C853;">ZERO</div>
+        <div class="stat-lbl">Water Consumed<br>Ever</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" style="color:#00C853;">GWP=0</div>
+        <div class="stat-lbl">Global Warming<br>Potential</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" style="color:#A8D4F5;">1.04–1.08</div>
+        <div class="stat-lbl">Target<br>PUE</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" style="color:#A8D4F5;">200kW</div>
+        <div class="stat-lbl">Per Rack<br>Supported</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" style="color:#FF4D00;">$27.65B</div>
+        <div class="stat-lbl">Market Size<br>2033</div>
+      </div>
+    </div>
+
+    <!-- Coming soon -->
+    <div class="coming-soon">
+      <div class="cs-line"></div>
+      <span class="cs-text">Website launching at</span>
+      <span class="cs-url">apexcoolingtech.com</span>
+      <div class="cs-line"></div>
+    </div>
+
+    <div class="patent-tag">
+      ⚡ Patent Pending  ·  Patterson + Sheridan LLP  ·  Houston, Texas
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ PROBLEM PANEL ══════════════════════════════════════════ -->
+<div class="problem-panel">
+  <div class="problem-inner">
+    <div class="problem-text">
+      <p class="section-label" style="color:var(--orange);">The Burning Platform</p>
+      <h2>Texas Is <em>Ground Zero</em></h2>
+      <p>
+        The nation's AI computing capital is simultaneously the epicenter
+        of one of the worst sustained droughts in its history —
+        with zero state law limiting how much water a data center can consume.
+      </p>
+      <p>
+        Every data center being built today with conventional cooling towers
+        is a future stranded asset. The water bill comes due.
+        APEX makes it irrelevant — permanently.
+      </p>
+    </div>
+    <div class="problem-numbers">
+      <div class="prob-num">
+        <div class="prob-val">530K</div>
+        <div class="prob-lbl">Gallons of water consumed per day<br>by a single 100 MW data center</div>
+      </div>
+      <div class="prob-num">
+        <div class="prob-val">399B</div>
+        <div class="prob-lbl">Gallons Texas data centers projected<br>to consume annually by 2030</div>
+      </div>
+      <div class="prob-num">
+        <div class="prob-val">70+</div>
+        <div class="prob-lbl">Texas data centers under construction<br>right now — each being designed today</div>
+      </div>
+      <div class="prob-num" style="border-color:var(--green);">
+        <div class="prob-val" style="color:var(--green);">ZERO</div>
+        <div class="prob-lbl">Gallons consumed by an<br>APEX MechPod — ever</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HOW IT WORKS PANEL ═════════════════════════════════════ -->
+<div class="how-panel">
+  <p class="section-label">The Five-Layer Stack</p>
+  <h2 class="section-title">How Heat Travels From GPU to Sky</h2>
+  <div class="layers-grid">
+    <div class="layer l1">
+      <div class="layer-num">1</div>
+      <span class="layer-icon">🔲</span>
+      <div class="layer-name">Chip Interface</div>
+      <div class="layer-desc">Frore LiquidJet Nexus GPU cold plate. Glycol only — no ammonia ever enters the server hall.</div>
+    </div>
+    <div class="layer l2">
+      <div class="layer-num">2</div>
+      <span class="layer-icon">🔄</span>
+      <div class="layer-name">Heat Exchanger</div>
+      <div class="layer-desc">Propylene glycol carries heat to industrial-grade heat exchanger HX. Fluids never mix. Closed loop — forever.</div>
+    </div>
+    <div class="layer l3">
+      <div class="layer-num">3</div>
+      <span class="layer-icon">❄️</span>
+      <div class="layer-name">NH3 Circuit</div>
+      <div class="layer-desc">Low-charge ammonia refrigeration. Under low-charge per circuit. Sealed mechanical room. safety standards compliant.</div>
+    </div>
+    <div class="layer l4">
+      <div class="layer-num">4</div>
+      <span class="layer-icon">🌬️</span>
+      <div class="layer-name">Dry Condenser</div>
+      <div class="layer-desc">EC fans reject heat to ambient air. Zero water. No cooling tower. No evaporation. Nothing lost.</div>
+    </div>
+    <div class="layer l5">
+      <div class="layer-num">5</div>
+      <span class="layer-icon">🧠</span>
+      <div class="layer-name">APEX Control</div>
+      <div class="layer-desc">PTC software reads the GPU job queue 90 seconds ahead. Pre-cools before workload hits. Zero throttling.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ZERO WATER CALLOUT ═════════════════════════════════════ -->
+<div class="zero-callout">
+  <p class="zero-quote">
+    "The glycol never leaves. The ammonia never leaves.
+    The only thing that leaves the system is <strong>dry air</strong> —
+    and dry air doesn't come from an aquifer."
+  </p>
+  <p class="zero-attr">— Andy Hodge, Co-Founder & CEO, APEX Cooling Technologies</p>
+</div>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════ -->
+<div class="site-footer">
+  <div class="footer-logo"><span>APEX</span> COOLING</div>
+  <div class="footer-info">
+    APEX Cooling Technologies, LLC  ·  Patent Pending<br>
+    Built in Crockett. Monitored from Austin. Zero water anywhere.
+  </div>
+  <div class="footer-contact">
+    apexcoolingtech.com<br>
+    apexcoolingtech@gmail.com<br>
+    (512) 947-5525
+  </div>
+</div>
+
+</body>
+</html>

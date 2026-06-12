@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX MechPod — Offerings & Scale</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A1628;--navy2:#0D2B55;--xdk:#060E1A;
+  --red:#CC1100;--orange:#FF4D00;
+  --green:#3ECF82;--blue:#5BA8E8;--ice:#A8D4F5;
+  --gold:#FFD600;--white:#F4F8FF;
+  --gray:#8A9BB0;--ltgray:#A8BCCF;--dkgray:#2A3A4A;
+  --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--xdk);font-family:'Barlow',sans-serif;color:var(--white);overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--red);}
+
+/* ── BG ── */
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 44px,rgba(168,212,245,0.016) 44px,rgba(168,212,245,0.016) 45px),
+  repeating-linear-gradient(90deg,transparent,transparent 44px,rgba(168,212,245,0.016) 44px,rgba(168,212,245,0.016) 45px);}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(4,10,18,0.97);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(204,17,0,0.2);
+  padding:0 48px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-logo svg{width:36px;height:36px;}
+.nav-brand{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--white);}
+.nav-brand em{color:var(--red);font-style:normal;}
+.nav-links{display:flex;align-items:center;gap:24px;}
+.nav-links a{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--white);}
+.nav-cta{background:var(--red)!important;color:var(--white)!important;padding:7px 18px;border-radius:3px;font-weight:700;}
+
+/* ── ROI STRIP ── */
+.roi-strip{
+  margin-top:60px;
+  background:rgba(6,14,26,0.97);
+  border-bottom:1px solid rgba(168,212,245,0.08);
+  padding:16px 48px;
+}
+.roi-strip-inner{
+  max-width:1300px;margin:0 auto;
+  display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center;
+}
+.rs-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gray);padding-right:28px;border-right:1px solid rgba(168,212,245,0.1);margin-right:28px;white-space:nowrap;}
+.rs-stats{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;align-items:center;}
+.rs-stat{text-align:center;}
+.rs-val{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;}
+.rs-lbl{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3A4A5A;}
+.rs-div{width:1px;height:30px;background:rgba(168,212,245,0.08);}
+.rs-link{margin-left:auto;padding-left:28px;border-left:1px solid rgba(168,212,245,0.1);}
+.rs-link a{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);text-decoration:none;white-space:nowrap;}
+
+/* ── SECTIONS ── */
+section{position:relative;z-index:5;padding:80px 48px;}
+.section-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,60px);line-height:0.95;letter-spacing:2px;margin-bottom:12px;}
+.section-sub{font-size:15px;font-weight:300;color:var(--ice);line-height:1.7;max-width:640px;margin-bottom:56px;}
+
+/* ── FOUR OFFERINGS ── */
+.offerings-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  max-width:1300px;margin:0 auto;
+}
+
+.offering-card{
+  background:rgba(13,27,50,0.6);
+  border:1px solid rgba(168,212,245,0.08);
+  border-radius:12px;
+  overflow:hidden;
+  transition:all 0.3s;
+  position:relative;
+}
+.offering-card:hover{border-color:rgba(168,212,245,0.2);transform:translateY(-3px);}
+
+/* Top color accent per card */
+.oc-1{border-top:3px solid var(--green);}
+.oc-2{border-top:3px solid var(--blue);}
+.oc-3{border-top:3px solid var(--gold);}
+.oc-4{border-top:3px solid var(--orange);grid-column:1/-1;}
+
+.oc-header{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  padding:24px 28px 16px;
+  border-bottom:1px solid rgba(168,212,245,0.06);
+}
+.oc-icon{font-size:28px;flex-shrink:0;margin-top:2px;}
+.oc-title-block{}
+.oc-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:4px;}
+.oc-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,2.5vw,30px);letter-spacing:1px;line-height:1;color:var(--white);}
+.oc-subtitle{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--gray);margin-top:3px;letter-spacing:1px;}
+.oc-capacity{text-align:right;flex-shrink:0;}
+.oc-cap-val{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1;margin-bottom:3px;}
+.oc-cap-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--gray);}
+
+.oc-body{padding:20px 28px;}
+.oc-desc{font-size:13px;color:var(--ltgray);line-height:1.65;margin-bottom:16px;}
+
+.oc-features{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.oc-feature{font-size:12px;color:var(--gray);display:flex;align-items:flex-start;gap:8px;line-height:1.5;}
+.oc-feature::before{content:'›';color:var(--green);flex-shrink:0;font-weight:700;}
+
+.oc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 0;border-top:1px solid rgba(168,212,245,0.06);}
+.oc-stat{text-align:center;}
+.oc-stat-val{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;margin-bottom:2px;}
+.oc-stat-lbl{font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#3A4A5A;}
+
+.oc-footer{padding:0 28px 20px;display:flex;gap:10px;}
+.btn-red{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--white);background:var(--red);padding:10px 20px;border-radius:3px;text-decoration:none;transition:all 0.2s;}
+.btn-red:hover{background:#AA0E00;}
+.btn-ghost{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ltgray);background:transparent;border:1px solid rgba(168,212,245,0.15);padding:10px 20px;border-radius:3px;text-decoration:none;transition:all 0.2s;}
+.btn-ghost:hover{border-color:var(--ltgray);color:var(--white);}
+
+/* ── POPULAR BADGE ── */
+.popular-badge{position:absolute;top:16px;right:16px;background:var(--green);color:var(--navy);font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;padding:3px 8px;border-radius:2px;text-transform:uppercase;}
+
+/* ── SCALE SECTION ── */
+.scale-section{background:rgba(6,14,24,0.8);border-top:1px solid rgba(168,212,245,0.06);}
+
+/* Scale selector tabs */
+.scale-tabs{
+  display:flex;gap:0;
+  background:rgba(13,27,50,0.6);
+  border:1px solid rgba(168,212,245,0.08);
+  border-radius:8px;
+  overflow:hidden;
+  max-width:900px;
+  margin:0 auto 48px;
+}
+.scale-tab{
+  flex:1;padding:16px 8px;text-align:center;cursor:pointer;
+  border:none;background:transparent;color:var(--gray);
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  transition:all 0.2s;border-right:1px solid rgba(168,212,245,0.06);
+}
+.scale-tab:last-child{border-right:none;}
+.scale-tab:hover{background:rgba(168,212,245,0.04);color:var(--white);}
+.scale-tab.active{background:rgba(204,17,0,0.1);color:var(--white);border-bottom:2px solid var(--red);}
+.scale-tab-pods{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;margin-bottom:4px;display:block;}
+
+/* Scale display panels */
+.scale-panels{max-width:1300px;margin:0 auto;}
+.scale-panel{display:none;}
+.scale-panel.active{display:block;}
+
+.scale-content{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:20px;
+  margin-bottom:24px;
+}
+
+/* Visual pod array */
+.pod-array{
+  background:rgba(13,27,50,0.6);
+  border:1px solid rgba(168,212,245,0.08);
+  border-radius:10px;
+  padding:24px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  min-height:200px;
+}
+.pod-array-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:16px;text-align:center;}
+.pod-grid{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:center;}
+.pod-box{
+  width:32px;height:14px;border-radius:2px;
+  background:linear-gradient(135deg,#F0E8D0,#D4C8A8);
+  border:1px solid rgba(180,170,148,0.5);
+  position:relative;display:flex;align-items:center;justify-content:center;
+}
+.pod-box::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:#CC1100;border-radius:2px 2px 0 0;}
+.pod-box.cond{background:linear-gradient(135deg,#1E3020,#141E14);border:1px solid rgba(60,110,60,0.4);}
+.pod-box.cond::before{content:'';height:100%;background:none;}
+.pod-row{display:flex;gap:4px;align-items:center;}
+.pod-label{font-family:var(--mono);font-size:8px;color:var(--gray);margin:6px 0 2px;text-align:center;width:100%;}
+.array-legend{display:flex;gap:12px;margin-top:10px;}
+.aleg{display:flex;align-items:center;gap:5px;font-family:'Barlow Condensed',sans-serif;font-size:9px;color:var(--gray);}
+.aleg-box{width:14px;height:6px;border-radius:1px;}
+
+/* Scale metrics card */
+.scale-metrics{
+  background:rgba(13,27,50,0.6);
+  border:1px solid rgba(168,212,245,0.08);
+  border-radius:10px;
+  padding:24px;
+}
+.scale-metrics-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:16px;}
+.metric-row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid rgba(168,212,245,0.05);}
+.metric-row:last-child{border-bottom:none;}
+.metric-label{font-size:12px;color:var(--ltgray);}
+.metric-value{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;}
+
+/* ROI card at scale */
+.scale-roi{
+  background:rgba(13,27,50,0.6);
+  border:1px solid rgba(62,207,130,0.2);
+  border-radius:10px;
+  padding:24px;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.scale-roi-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:12px;}
+.roi-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,4vw,52px);color:var(--green);line-height:1;margin-bottom:4px;}
+.roi-sub{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gray);margin-bottom:16px;}
+.roi-breakdown{display:flex;flex-direction:column;gap:6px;}
+.roi-line{display:flex;justify-content:space-between;font-size:11px;}
+.roi-line-label{color:var(--gray);}
+.roi-line-val{font-family:var(--mono);font-size:11px;}
+
+/* Payback bar */
+.payback-bar{margin-top:16px;padding-top:14px;border-top:1px solid rgba(62,207,130,0.1);}
+.pb-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:6px;}
+.pb-track{background:rgba(168,212,245,0.06);border-radius:3px;height:6px;overflow:hidden;}
+.pb-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green),rgba(62,207,130,0.4));}
+.pb-val{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);margin-top:4px;}
+
+/* Comparison bar full width */
+.scale-compare{
+  background:rgba(13,27,50,0.5);
+  border:1px solid rgba(168,212,245,0.06);
+  border-radius:10px;
+  padding:20px 24px;
+  display:grid;
+  grid-template-columns:140px 1fr 140px;
+  gap:16px;align-items:center;
+}
+.sc-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.sc-bar-track{background:rgba(168,212,245,0.04);border-radius:4px;height:28px;overflow:hidden;position:relative;}
+.sc-bar-conv{height:100%;border-radius:4px;background:linear-gradient(90deg,rgba(204,17,0,0.5),rgba(204,17,0,0.2));display:flex;align-items:center;padding-left:12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:white;}
+.sc-bar-apex{position:absolute;top:0;left:0;height:100%;border-radius:4px;background:linear-gradient(90deg,rgba(62,207,130,0.6),rgba(62,207,130,0.3));display:flex;align-items:center;padding-left:12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:white;}
+
+/* ── FOOTER ── */
+footer{
+  position:relative;z-index:5;
+  background:#040A12;
+  border-top:1px solid rgba(168,212,245,0.05);
+  padding:28px 48px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;}
+.footer-logo em{color:var(--red);font-style:normal;}
+.footer-info{font-size:10px;color:#1E2E3E;letter-spacing:1px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;text-align:right;line-height:1.8;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+@media(max-width:1000px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  section{padding:60px 20px;}
+  .offerings-grid{grid-template-columns:1fr;}
+  .oc-4{grid-column:auto;}
+  .scale-content{grid-template-columns:1fr;}
+  .roi-strip{padding:12px 20px;}
+}
+@media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<!-- NAV -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(4,10,18,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(204,17,0,0.2);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#F4F8FF;"><span style="color:#CC1100;">APEX</span> COOLING</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+    <a href="index.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Home</a>
+    <a href="about.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">About</a>
+    <a href="solution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Solution</a>
+    <a href="why-apex.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Why APEX</a>
+    <a href="roi.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">ROI</a>
+    <a href="evolution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Evolution</a>
+    <a href="industry-analysis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Industry</a>
+    <a href="crisis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Crisis</a>
+    <a href="deployment-cover.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Deployment</a>
+    <a href="news.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">News</a>
+    <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Contact</a>
+    <a href="https://apexmechpod.com" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#F4F8FF;background:#CC1100;padding:8px 18px;border-radius:3px;text-decoration:none;">MechPod →</a>
+  </div>
+</nav>
+
+<!-- ROI STRIP -->
+<div class="roi-strip">
+  <div class="roi-strip-inner">
+    <div class="rs-label">100 MW Facility · Annual Impact</div>
+    <div class="rs-stats">
+      <div class="rs-stat"><div class="rs-val" style="color:var(--green);">$28.7M</div><div class="rs-lbl">Annual Savings</div></div>
+      <div class="rs-div"></div>
+      <div class="rs-stat"><div class="rs-val" style="color:var(--gold);">&lt;3 Mo</div><div class="rs-lbl">Payback</div></div>
+      <div class="rs-div"></div>
+      <div class="rs-stat"><div class="rs-val" style="color:var(--blue);">1.06</div><div class="rs-lbl">Target PUE</div></div>
+      <div class="rs-div"></div>
+      <div class="rs-stat"><div class="rs-val" style="color:var(--green);">ZERO</div><div class="rs-lbl">Gal Water</div></div>
+      <div class="rs-div"></div>
+      <div class="rs-stat"><div class="rs-val" style="color:var(--gold);">$287M</div><div class="rs-lbl">10-Year</div></div>
+      <div class="rs-div"></div>
+      <div class="rs-stat"><div class="rs-val" style="color:var(--red);">573x</div><div class="rs-lbl">ROI</div></div>
+    </div>
+    <div class="rs-link"><a href="roi.html">Full ROI Analysis →</a></div>
+  </div>
+</div>
+
+<!-- ══ SECTION 1: FOUR OFFERINGS ══ -->
+<section>
+  <div style="max-width:1300px;margin:0 auto;">
+    <div class="section-eyebrow">Four APEX Offerings</div>
+    <h1 class="section-title">Choose Your<br>Deployment Scale.</h1>
+    <p class="section-sub">Every APEX offering uses the same proven ammonia refrigeration architecture — zero water, GWP=0, AI-workload-aware PTC. You choose the form factor and scale. We bring everything else.</p>
+
+    <div class="offerings-grid">
+
+      <!-- CARD 1: 40HC-S -->
+      <div class="offering-card oc-1">
+        <div class="oc-header">
+          <div style="display:flex;align-items:flex-start;gap:12px;flex:1;">
+            <div class="oc-icon">📦</div>
+            <div class="oc-title-block">
+              <div class="oc-label">Entry · Single Circuit</div>
+              <div class="oc-title">MechPod 40HC-S</div>
+              <div class="oc-subtitle">Standard · 40ft ISO High-Cube · <span style="color:var(--blue);font-size:9px;background:rgba(91,168,232,0.1);border:1px solid rgba(91,168,232,0.3);padding:1px 6px;border-radius:2px;margin-left:4px;">OUTSIDE</span></div>
+            </div>
+          </div>
+          <div class="oc-capacity">
+            <div class="oc-cap-val" style="color:var(--green);">1.37 MW</div>
+            <div class="oc-cap-lbl">Max Capacity</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gray);margin-top:4px;">0.1 – 1.37 MW</div>
+          </div>
+        </div>
+        <div class="oc-body">
+          <p class="oc-desc">Single refrigeration circuit in a standard 40-foot ISO High-Cube container. The entry point for APEX deployment — prove the technology alongside your existing cooling system, then scale.</p>
+          <div class="oc-features">
+            <div class="oc-feature">Single ammonia refrigeration circuit — pre-charged at factory</div>
+            <div class="oc-feature">Colmac horizontal dry air condenser — zero water at 113°F ambient</div>
+            <div class="oc-feature">APEX Control PTC — full GPU scheduler integration</div>
+            <div class="oc-feature">Connects to existing glycol loop or new loop as needed</div>
+            <div class="oc-feature">Level pad + 480V — no building modifications required</div>
+          </div>
+          <div class="oc-stats">
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--green);">ZERO</div><div class="oc-stat-lbl">Water</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--blue);">1.06</div><div class="oc-stat-lbl">PUE Target</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--gold);">GWP=0</div><div class="oc-stat-lbl">Refrigerant</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--green);">Days</div><div class="oc-stat-lbl">Deploy Time</div></div>
+          </div>
+        </div>
+        <div class="oc-footer">
+          <a href="quote.html" class="btn-red">Request Quote</a>
+          <a href="specs.html" class="btn-ghost">Specs →</a>
+        </div>
+      </div>
+
+      <!-- CARD 2: 40HC-D (Most Popular) -->
+      <div class="offering-card oc-2">
+        <div class="popular-badge">Most Popular</div>
+        <div class="oc-header">
+          <div style="display:flex;align-items:flex-start;gap:12px;flex:1;">
+            <div class="oc-icon">📦📦</div>
+            <div class="oc-title-block">
+              <div class="oc-label">Standard · Dual Circuit N+1</div>
+              <div class="oc-title">MechPod 40HC-D</div>
+              <div class="oc-subtitle">Redundant · 40ft ISO High-Cube · <span style="color:var(--blue);font-size:9px;background:rgba(91,168,232,0.1);border:1px solid rgba(91,168,232,0.3);padding:1px 6px;border-radius:2px;margin-left:4px;">OUTSIDE</span></div>
+            </div>
+          </div>
+          <div class="oc-capacity">
+            <div class="oc-cap-val" style="color:var(--blue);">2.74 MW</div>
+            <div class="oc-cap-lbl">Max Capacity</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gray);margin-top:4px;">0.2 – 2.74 MW</div>
+          </div>
+        </div>
+        <div class="oc-body">
+          <p class="oc-desc">Dual independent refrigeration circuits in one container — full N+1 redundancy standard. If Circuit A needs service, Circuit B carries 100% of the load automatically. Zero downtime. The APEX workhorse.</p>
+          <div class="oc-features">
+            <div class="oc-feature">Two fully independent ammonia circuits — N+1 redundancy standard</div>
+            <div class="oc-feature">Auto-failover in milliseconds — no manual intervention</div>
+            <div class="oc-feature">Either circuit handles 100% of rated load independently</div>
+            <div class="oc-feature">Twice the capacity of 40HC-S in the same container footprint</div>
+            <div class="oc-feature">APEX Control PTC manages both circuits simultaneously</div>
+          </div>
+          <div class="oc-stats">
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--green);">N+1</div><div class="oc-stat-lbl">Redundancy</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--blue);">1.06</div><div class="oc-stat-lbl">PUE Target</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--gold);">ZERO</div><div class="oc-stat-lbl">Water</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--green);">2x</div><div class="oc-stat-lbl">vs HC-S</div></div>
+          </div>
+        </div>
+        <div class="oc-footer">
+          <a href="quote.html" class="btn-red">Request Quote</a>
+          <a href="specs.html" class="btn-ghost">Specs →</a>
+        </div>
+      </div>
+
+      <!-- CARD 3: MechPod Campus Array -->
+      <div class="offering-card oc-3">
+        <div class="oc-header">
+          <div style="display:flex;align-items:flex-start;gap:12px;flex:1;">
+            <div class="oc-icon">⚡</div>
+            <div class="oc-title-block">
+              <div class="oc-label">Scale · Multiple MechPods · Outside</div>
+              <div class="oc-title">MechPod Campus Array</div>
+              <div class="oc-subtitle">Any Number of Containers · Fully Scalable · <span style="color:var(--blue);font-size:9px;background:rgba(91,168,232,0.1);border:1px solid rgba(91,168,232,0.3);padding:1px 6px;border-radius:2px;margin-left:4px;">OUTSIDE</span></div>
+            </div>
+          </div>
+          <div class="oc-capacity">
+            <div class="oc-cap-val" style="color:var(--gold);">100+ MW</div>
+            <div class="oc-cap-lbl">Scalable To</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gray);margin-top:4px;">5 – 100+ MW</div>
+          </div>
+        </div>
+        <div class="oc-body">
+          <p class="oc-desc">Any number of MechPod 40HC-D containers deployed side by side on a common pad outside the data center — all connected to the same glycol loop and managed by a single APEX Control instance. Each pod is fully independent. Add units as your compute grows with zero downtime to existing pods.</p>
+          <div class="oc-features">
+            <div class="oc-feature">Any number of MechPod containers — all sitting outside on a compacted pad</div>
+            <div class="oc-feature">Unified APEX Control dashboard — one view for all pods</div>
+            <div class="oc-feature">Scale up by adding pods — no downtime to existing units</div>
+            <div class="oc-feature">APEX site engineering team designs the full layout</div>
+            <div class="oc-feature">No building modifications — same level pad and 480V per pod</div>
+          </div>
+          <div class="oc-stats">
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--gold);">100+</div><div class="oc-stat-lbl">MW Scale</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--green);">1.04</div><div class="oc-stat-lbl">PUE Target</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--green);">ZERO</div><div class="oc-stat-lbl">Water</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--blue);">Custom</div><div class="oc-stat-lbl">Layout</div></div>
+          </div>
+        </div>
+        <div class="oc-footer">
+          <a href="quote.html" class="btn-red">Configure Your Array</a>
+          <a href="deployment-cover.html" class="btn-ghost">See Campus Array Map →</a>
+        </div>
+      </div>
+
+      <!-- CARD 4: Integrated Room Build -->
+      <div class="offering-card oc-4">
+        <div class="oc-header">
+          <div style="display:flex;align-items:flex-start;gap:12px;flex:1;">
+            <div class="oc-icon">🏗️</div>
+            <div class="oc-title-block">
+              <div class="oc-label">Permanent · Inside the Facility · Machine Room</div>
+              <div class="oc-title">APEX Integrated Room Build</div>
+              <div class="oc-subtitle">Permanently Installed Inside the Building · No Containers · <span style="color:var(--orange);font-size:9px;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.3);padding:1px 6px;border-radius:2px;margin-left:4px;">INSIDE BUILDING</span></div>
+            </div>
+          </div>
+          <div class="oc-capacity">
+            <div class="oc-cap-val" style="color:var(--orange);">500+ MW</div>
+            <div class="oc-cap-lbl">Capable</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gray);margin-top:4px;">5 – 500+ MW</div>
+          </div>
+        </div>
+        <div class="oc-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;">
+            <div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:10px;">What It Is</div>
+              <p class="oc-desc" style="margin-bottom:0;">A fully engineered APEX ammonia refrigeration and heat exchange system built permanently inside the mechanical room of a data center facility. No containers. No exterior equipment. Don Kreger and the APEX engineering team design and commission the full system from scratch — sized exactly to the building load.</p>
+            </div>
+            <div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:10px;">Best For</div>
+              <div class="oc-features">
+                <div class="oc-feature">Greenfield new construction — system lives inside the building</div>
+                <div class="oc-feature">Facilities where permanent in-building infrastructure is preferred</div>
+                <div class="oc-feature">Custom rack density or non-standard building configurations</div>
+                <div class="oc-feature">Hyperscalers designing permanent infrastructure</div>
+              </div>
+            </div>
+            <div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:10px;">Core Architecture</div>
+              <div class="oc-features">
+                <div class="oc-feature">APEX ammonia refrigeration circuit — custom for facility load</div>
+                <div class="oc-feature">Dedicated sealed mechanical room — APEX designed</div>
+                <div class="oc-feature">Roof or ground mounted dry air condensers — zero water</div>
+                <div class="oc-feature">APEX Control software — same PTC intelligence as MechPod</div>
+              </div>
+            </div>
+          </div>
+          <div class="oc-stats" style="margin-top:16px;grid-template-columns:repeat(5,1fr);">
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--green);">ZERO</div><div class="oc-stat-lbl">Water</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--green);">GWP=0</div><div class="oc-stat-lbl">Refrigerant</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--orange);">Custom</div><div class="oc-stat-lbl">Every Build</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--blue);">N+1</div><div class="oc-stat-lbl">Redundancy</div></div>
+            <div class="oc-stat"><div class="oc-stat-val" style="color:var(--orange);">500+</div><div class="oc-stat-lbl">MW Capable</div></div>
+          </div>
+        </div>
+        <div class="oc-footer">
+          <a href="quote.html" class="btn-red">🏗️ Configure Your Array →</a>
+          <a href="mailto:apexcoolingtech@gmail.com" class="btn-ghost">Talk to Engineering</a>
+        </div>
+      </div>
+
+    </div><!-- /offerings-grid -->
+  </div>
+</section>
+
+<!-- ══ SECTION 2: SCALE CALCULATOR ══ -->
+<section class="scale-section">
+  <div style="max-width:1300px;margin:0 auto;">
+    <div class="section-eyebrow">Scale at Your Pace</div>
+    <h2 class="section-title">From One MechPod<br>To a Full Campus.</h2>
+    <p class="section-sub">Every deployment starts with one MechPod. Add units as your compute grows — each one is independent, each one is self-contained. No downtime to existing units. No infrastructure rebuild. Just connect and cool.</p>
+
+    <!-- Scale selector -->
+    <div class="scale-tabs">
+      <button class="scale-tab active" onclick="showScale(1)">
+        <span class="scale-tab-pods">1</span>MechPod
+      </button>
+      <button class="scale-tab" onclick="showScale(5)">
+        <span class="scale-tab-pods">5</span>MechPods
+      </button>
+      <button class="scale-tab" onclick="showScale(10)">
+        <span class="scale-tab-pods">10</span>MechPods
+      </button>
+      <button class="scale-tab" onclick="showScale(20)">
+        <span class="scale-tab-pods">20</span>MechPods
+      </button>
+      <button class="scale-tab" onclick="showScale(40)">
+        <span class="scale-tab-pods">40</span>MechPods
+      </button>
+    </div>
+
+    <div class="scale-panels">
+
+      <!-- 1 MechPod -->
+      <div class="scale-panel active" id="scale-1">
+        <div class="scale-content">
+          <div class="pod-array">
+            <div class="pod-array-title">Deployment Footprint — Bird's Eye</div>
+            <div class="pod-grid">
+              <div class="pod-row">
+                <div class="pod-box cond"></div>
+              </div>
+              <div class="pod-label">DRY AIR CONDENSER</div>
+              <div class="pod-row">
+                <div class="pod-box"></div>
+              </div>
+              <div class="pod-label">APEX MECHPOD 40HC-D</div>
+            </div>
+            <div class="array-legend">
+              <div class="aleg"><div class="aleg-box" style="background:linear-gradient(135deg,#F0E8D0,#D4C8A8);border:1px solid rgba(180,168,140,0.5);"></div>MechPod</div>
+              <div class="aleg"><div class="aleg-box" style="background:#1E3020;border:1px solid rgba(60,110,60,0.4);"></div>Condenser</div>
+            </div>
+          </div>
+          <div class="scale-metrics">
+            <div class="scale-metrics-title">System Metrics — 1 MechPod 40HC-D</div>
+            <div class="metric-row"><span class="metric-label">Cooling Capacity</span><span class="metric-value" style="color:var(--blue);">2.74 MW</span></div>
+            <div class="metric-row"><span class="metric-label">Target PUE</span><span class="metric-value" style="color:var(--green);">1.04 – 1.08</span></div>
+            <div class="metric-row"><span class="metric-label">Water Consumed</span><span class="metric-value" style="color:var(--green);">ZERO gal/day</span></div>
+            <div class="metric-row"><span class="metric-label">Redundancy</span><span class="metric-value" style="color:var(--blue);">N+1 Standard</span></div>
+            <div class="metric-row"><span class="metric-label">Container Footprint</span><span class="metric-value" style="color:var(--ltgray);">40 × 8 ft</span></div>
+            <div class="metric-row"><span class="metric-label">Deploy Time</span><span class="metric-value" style="color:var(--gold);">1–2 Weeks</span></div>
+            <div class="metric-row"><span class="metric-label">Refrigerant</span><span class="metric-value" style="color:var(--green);">NH₃ GWP=0</span></div>
+          </div>
+          <div class="scale-roi">
+            <div>
+              <div class="scale-roi-title">Annual Financial Impact</div>
+              <div class="roi-big">$786K</div>
+              <div class="roi-sub">Estimated Annual Savings</div>
+              <div class="roi-breakdown">
+                <div class="roi-line"><span class="roi-line-label">Electricity savings (PUE gap)</span><span class="roi-line-val" style="color:var(--green);">~$740K</span></div>
+                <div class="roi-line"><span class="roi-line-label">Water + chemicals</span><span class="roi-line-val" style="color:var(--green);">~$27K</span></div>
+                <div class="roi-line"><span class="roi-line-label">Maintenance + HFC</span><span class="roi-line-val" style="color:var(--green);">~$19K</span></div>
+              </div>
+            </div>
+            <div class="payback-bar">
+              <div class="pb-label">Payback Period</div>
+              <div class="pb-track"><div class="pb-fill" style="width:8%;"></div></div>
+              <div class="pb-val">&lt; 3 Months</div>
+            </div>
+          </div>
+        </div>
+        <div class="scale-compare">
+          <div><div class="sc-label" style="color:var(--red);">Conventional</div><div style="font-family:var(--mono);font-size:11px;color:var(--gray);">~$890K/yr cost</div></div>
+          <div class="sc-bar-track">
+            <div class="sc-bar-conv" style="width:100%;">$890K annual cooling cost</div>
+            <div class="sc-bar-apex" style="width:12%;">$104K</div>
+          </div>
+          <div style="text-align:right;"><div class="sc-label" style="color:var(--green);">APEX</div><div style="font-family:var(--mono);font-size:11px;color:var(--green);">~$104K/yr cost</div></div>
+        </div>
+      </div>
+
+      <!-- 5 MechPods -->
+      <div class="scale-panel" id="scale-5">
+        <div class="scale-content">
+          <div class="pod-array">
+            <div class="pod-array-title">Deployment Footprint — Bird's Eye</div>
+            <div class="pod-grid" style="flex-direction:column;gap:4px;">
+              <div class="pod-row">
+                <div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div>
+              </div>
+              <div class="pod-label">DRY AIR CONDENSERS (5)</div>
+              <div class="pod-row">
+                <div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div>
+              </div>
+              <div class="pod-label">APEX MECHPODS 01–05</div>
+            </div>
+            <div class="array-legend">
+              <div class="aleg"><div class="aleg-box" style="background:linear-gradient(135deg,#F0E8D0,#D4C8A8);border:1px solid rgba(180,168,140,0.5);"></div>MechPod</div>
+              <div class="aleg"><div class="aleg-box" style="background:#1E3020;border:1px solid rgba(60,110,60,0.4);"></div>Condenser</div>
+            </div>
+          </div>
+          <div class="scale-metrics">
+            <div class="scale-metrics-title">System Metrics — 5 MechPods</div>
+            <div class="metric-row"><span class="metric-label">Total Cooling Capacity</span><span class="metric-value" style="color:var(--blue);">13.7 MW</span></div>
+            <div class="metric-row"><span class="metric-label">Target PUE</span><span class="metric-value" style="color:var(--green);">1.04 – 1.08</span></div>
+            <div class="metric-row"><span class="metric-label">Water Consumed</span><span class="metric-value" style="color:var(--green);">ZERO gal/day</span></div>
+            <div class="metric-row"><span class="metric-label">Redundancy</span><span class="metric-value" style="color:var(--blue);">N+1 Per Unit</span></div>
+            <div class="metric-row"><span class="metric-label">Total Footprint</span><span class="metric-value" style="color:var(--ltgray);">~200 × 8 ft</span></div>
+            <div class="metric-row"><span class="metric-label">Deploy Time</span><span class="metric-value" style="color:var(--gold);">2–4 Weeks</span></div>
+            <div class="metric-row"><span class="metric-label">GPU Racks Supported</span><span class="metric-value" style="color:var(--gold);">~68 racks</span></div>
+          </div>
+          <div class="scale-roi">
+            <div>
+              <div class="scale-roi-title">Annual Financial Impact</div>
+              <div class="roi-big">$3.9M</div>
+              <div class="roi-sub">Estimated Annual Savings</div>
+              <div class="roi-breakdown">
+                <div class="roi-line"><span class="roi-line-label">Electricity savings</span><span class="roi-line-val" style="color:var(--green);">~$3.7M</span></div>
+                <div class="roi-line"><span class="roi-line-label">Water + chemicals</span><span class="roi-line-val" style="color:var(--green);">~$134K</span></div>
+                <div class="roi-line"><span class="roi-line-label">Maintenance + HFC</span><span class="roi-line-val" style="color:var(--green);">~$96K</span></div>
+              </div>
+            </div>
+            <div class="payback-bar">
+              <div class="pb-label">Payback Period</div>
+              <div class="pb-track"><div class="pb-fill" style="width:8%;"></div></div>
+              <div class="pb-val">&lt; 3 Months</div>
+            </div>
+          </div>
+        </div>
+        <div class="scale-compare">
+          <div><div class="sc-label" style="color:var(--red);">Conventional</div><div style="font-family:var(--mono);font-size:11px;color:var(--gray);">~$4.45M/yr cost</div></div>
+          <div class="sc-bar-track">
+            <div class="sc-bar-conv" style="width:100%;">$4.45M annual cooling cost</div>
+            <div class="sc-bar-apex" style="width:12%;">$520K</div>
+          </div>
+          <div style="text-align:right;"><div class="sc-label" style="color:var(--green);">APEX</div><div style="font-family:var(--mono);font-size:11px;color:var(--green);">~$520K/yr cost</div></div>
+        </div>
+      </div>
+
+      <!-- 10 MechPods -->
+      <div class="scale-panel" id="scale-10">
+        <div class="scale-content">
+          <div class="pod-array">
+            <div class="pod-array-title">Deployment Footprint — Bird's Eye</div>
+            <div class="pod-grid" style="flex-direction:column;gap:4px;">
+              <div class="pod-row">
+                <div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div>
+                <div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div>
+              </div>
+              <div class="pod-label">DRY AIR CONDENSERS (10)</div>
+              <div class="pod-row">
+                <div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div>
+                <div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div>
+              </div>
+              <div class="pod-label">APEX MECHPODS 01–10</div>
+            </div>
+            <div class="array-legend">
+              <div class="aleg"><div class="aleg-box" style="background:linear-gradient(135deg,#F0E8D0,#D4C8A8);border:1px solid rgba(180,168,140,0.5);"></div>MechPod</div>
+              <div class="aleg"><div class="aleg-box" style="background:#1E3020;border:1px solid rgba(60,110,60,0.4);"></div>Condenser</div>
+            </div>
+          </div>
+          <div class="scale-metrics">
+            <div class="scale-metrics-title">System Metrics — 10 MechPods</div>
+            <div class="metric-row"><span class="metric-label">Total Cooling Capacity</span><span class="metric-value" style="color:var(--blue);">27.4 MW</span></div>
+            <div class="metric-row"><span class="metric-label">Target PUE</span><span class="metric-value" style="color:var(--green);">1.04 – 1.08</span></div>
+            <div class="metric-row"><span class="metric-label">Water Consumed</span><span class="metric-value" style="color:var(--green);">ZERO gal/day</span></div>
+            <div class="metric-row"><span class="metric-label">Redundancy</span><span class="metric-value" style="color:var(--blue);">N+1 Per Unit</span></div>
+            <div class="metric-row"><span class="metric-label">Total Footprint</span><span class="metric-value" style="color:var(--ltgray);">~400 × 8 ft</span></div>
+            <div class="metric-row"><span class="metric-label">Deploy Time</span><span class="metric-value" style="color:var(--gold);">4–8 Weeks</span></div>
+            <div class="metric-row"><span class="metric-label">GPU Racks Supported</span><span class="metric-value" style="color:var(--gold);">~137 racks</span></div>
+          </div>
+          <div class="scale-roi">
+            <div>
+              <div class="scale-roi-title">Annual Financial Impact</div>
+              <div class="roi-big">$7.87M</div>
+              <div class="roi-sub">Estimated Annual Savings</div>
+              <div class="roi-breakdown">
+                <div class="roi-line"><span class="roi-line-label">Electricity savings</span><span class="roi-line-val" style="color:var(--green);">~$7.4M</span></div>
+                <div class="roi-line"><span class="roi-line-label">Water + chemicals</span><span class="roi-line-val" style="color:var(--green);">~$268K</span></div>
+                <div class="roi-line"><span class="roi-line-label">Maintenance + HFC</span><span class="roi-line-val" style="color:var(--green);">~$192K</span></div>
+              </div>
+            </div>
+            <div class="payback-bar">
+              <div class="pb-label">Payback Period</div>
+              <div class="pb-track"><div class="pb-fill" style="width:8%;"></div></div>
+              <div class="pb-val">&lt; 3 Months</div>
+            </div>
+          </div>
+        </div>
+        <div class="scale-compare">
+          <div><div class="sc-label" style="color:var(--red);">Conventional</div><div style="font-family:var(--mono);font-size:11px;color:var(--gray);">~$8.9M/yr cost</div></div>
+          <div class="sc-bar-track">
+            <div class="sc-bar-conv" style="width:100%;">$8.9M annual cooling cost</div>
+            <div class="sc-bar-apex" style="width:12%;">$1.04M</div>
+          </div>
+          <div style="text-align:right;"><div class="sc-label" style="color:var(--green);">APEX</div><div style="font-family:var(--mono);font-size:11px;color:var(--green);">~$1.04M/yr cost</div></div>
+        </div>
+      </div>
+
+      <!-- 20 MechPods -->
+      <div class="scale-panel" id="scale-20">
+        <div class="scale-content">
+          <div class="pod-array">
+            <div class="pod-array-title">Deployment Footprint — Bird's Eye</div>
+            <div class="pod-grid" style="flex-direction:column;gap:4px;">
+              <div class="pod-row" style="gap:3px;">
+                <div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div>
+                <div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div>
+                <div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div>
+                <div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div><div class="pod-box cond"></div>
+              </div>
+              <div class="pod-label">DRY AIR CONDENSERS (20)</div>
+              <div class="pod-row" style="gap:3px;">
+                <div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div>
+                <div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div>
+                <div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div>
+                <div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div><div class="pod-box"></div>
+              </div>
+              <div class="pod-label">APEX MECHPODS 01–20</div>
+            </div>
+            <div class="array-legend">
+              <div class="aleg"><div class="aleg-box" style="background:linear-gradient(135deg,#F0E8D0,#D4C8A8);border:1px solid rgba(180,168,140,0.5);"></div>MechPod</div>
+              <div class="aleg"><div class="aleg-box" style="background:#1E3020;border:1px solid rgba(60,110,60,0.4);"></div>Condenser</div>
+            </div>
+          </div>
+          <div class="scale-metrics">
+            <div class="scale-metrics-title">System Metrics — 20 MechPods</div>
+            <div class="metric-row"><span class="metric-label">Total Cooling Capacity</span><span class="metric-value" style="color:var(--blue);">54.8 MW</span></div>
+            <div class="metric-row"><span class="metric-label">Target PUE</span><span class="metric-value" style="color:var(--green);">1.04 – 1.08</span></div>
+            <div class="metric-row"><span class="metric-label">Water Consumed</span><span class="metric-value" style="color:var(--green);">ZERO gal/day</span></div>
+            <div class="metric-row"><span class="metric-label">Redundancy</span><span class="metric-value" style="color:var(--blue);">N+1 Per Unit</span></div>
+            <div class="metric-row"><span class="metric-label">Approx. Footprint</span><span class="metric-value" style="color:var(--ltgray);">~600 ft row</span></div>
+            <div class="metric-row"><span class="metric-label">Deploy Time</span><span class="metric-value" style="color:var(--gold);">8–14 Weeks</span></div>
+            <div class="metric-row"><span class="metric-label">GPU Racks Supported</span><span class="metric-value" style="color:var(--gold);">~274 racks</span></div>
+          </div>
+          <div class="scale-roi">
+            <div>
+              <div class="scale-roi-title">Annual Financial Impact</div>
+              <div class="roi-big">$15.74M</div>
+              <div class="roi-sub">Estimated Annual Savings</div>
+              <div class="roi-breakdown">
+                <div class="roi-line"><span class="roi-line-label">Electricity savings</span><span class="roi-line-val" style="color:var(--green);">~$14.8M</span></div>
+                <div class="roi-line"><span class="roi-line-label">Water + chemicals</span><span class="roi-line-val" style="color:var(--green);">~$536K</span></div>
+                <div class="roi-line"><span class="roi-line-label">Maintenance + HFC</span><span class="roi-line-val" style="color:var(--green);">~$384K</span></div>
+              </div>
+            </div>
+            <div class="payback-bar">
+              <div class="pb-label">Payback Period</div>
+              <div class="pb-track"><div class="pb-fill" style="width:8%;"></div></div>
+              <div class="pb-val">&lt; 3 Months</div>
+            </div>
+          </div>
+        </div>
+        <div class="scale-compare">
+          <div><div class="sc-label" style="color:var(--red);">Conventional</div><div style="font-family:var(--mono);font-size:11px;color:var(--gray);">~$17.8M/yr cost</div></div>
+          <div class="sc-bar-track">
+            <div class="sc-bar-conv" style="width:100%;">$17.8M annual cooling cost</div>
+            <div class="sc-bar-apex" style="width:12%;">$2.08M</div>
+          </div>
+          <div style="text-align:right;"><div class="sc-label" style="color:var(--green);">APEX</div><div style="font-family:var(--mono);font-size:11px;color:var(--green);">~$2.08M/yr cost</div></div>
+        </div>
+      </div>
+
+      <!-- 40 MechPods -->
+      <div class="scale-panel" id="scale-40">
+        <div class="scale-content">
+          <div class="pod-array">
+            <div class="pod-array-title">Deployment Footprint — Bird's Eye</div>
+            <div class="pod-grid" style="flex-direction:column;gap:3px;">
+              <div class="pod-label" style="margin-bottom:3px;">CONDENSERS — ROW A (20)</div>
+              <div class="pod-row" style="gap:2px;flex-wrap:wrap;justify-content:flex-start;">
+                <div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div>
+                <div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div>
+                <div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div>
+                <div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div>
+              </div>
+              <div class="pod-row" style="gap:2px;flex-wrap:wrap;justify-content:flex-start;">
+                <div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div>
+                <div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div>
+                <div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div>
+                <div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div>
+              </div>
+              <div class="pod-label">MECHPODS 01–20 · ROW A &nbsp;&nbsp;&nbsp; MECHPODS 21–40 · ROW B</div>
+              <div class="pod-row" style="gap:2px;flex-wrap:wrap;justify-content:flex-start;">
+                <div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div>
+                <div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div>
+                <div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div>
+                <div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div><div class="pod-box" style="width:24px;height:10px;"></div>
+              </div>
+              <div class="pod-row" style="gap:2px;flex-wrap:wrap;justify-content:flex-start;">
+                <div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div>
+                <div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div>
+                <div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div>
+                <div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div><div class="pod-box cond" style="width:24px;height:10px;"></div>
+              </div>
+              <div class="pod-label">CONDENSERS — ROW B (20)</div>
+            </div>
+          </div>
+          <div class="scale-metrics">
+            <div class="scale-metrics-title">System Metrics — 40 MechPods</div>
+            <div class="metric-row"><span class="metric-label">Total Cooling Capacity</span><span class="metric-value" style="color:var(--blue);">109.6 MW</span></div>
+            <div class="metric-row"><span class="metric-label">Target PUE</span><span class="metric-value" style="color:var(--green);">1.04 – 1.08</span></div>
+            <div class="metric-row"><span class="metric-label">Water Consumed</span><span class="metric-value" style="color:var(--green);">ZERO gal/day</span></div>
+            <div class="metric-row"><span class="metric-label">Redundancy</span><span class="metric-value" style="color:var(--blue);">N+1 Per Unit</span></div>
+            <div class="metric-row"><span class="metric-label">Layout</span><span class="metric-value" style="color:var(--ltgray);">2 Rows × 20</span></div>
+            <div class="metric-row"><span class="metric-label">Deploy Time</span><span class="metric-value" style="color:var(--gold);">16–24 Weeks</span></div>
+            <div class="metric-row"><span class="metric-label">Conventional Water Saved</span><span class="metric-value" style="color:var(--green);">57M gal/yr</span></div>
+          </div>
+          <div class="scale-roi">
+            <div>
+              <div class="scale-roi-title">Annual Financial Impact</div>
+              <div class="roi-big">$31.5M</div>
+              <div class="roi-sub">Estimated Annual Savings</div>
+              <div class="roi-breakdown">
+                <div class="roi-line"><span class="roi-line-label">Electricity savings</span><span class="roi-line-val" style="color:var(--green);">~$29.6M</span></div>
+                <div class="roi-line"><span class="roi-line-label">Water + chemicals</span><span class="roi-line-val" style="color:var(--green);">~$1.07M</span></div>
+                <div class="roi-line"><span class="roi-line-label">Maintenance + HFC</span><span class="roi-line-val" style="color:var(--green);">~$768K</span></div>
+              </div>
+            </div>
+            <div class="payback-bar">
+              <div class="pb-label">Payback Period</div>
+              <div class="pb-track"><div class="pb-fill" style="width:8%;"></div></div>
+              <div class="pb-val">&lt; 3 Months</div>
+            </div>
+          </div>
+        </div>
+        <div class="scale-compare">
+          <div><div class="sc-label" style="color:var(--red);">Conventional</div><div style="font-family:var(--mono);font-size:11px;color:var(--gray);">~$35.6M/yr cost</div></div>
+          <div class="sc-bar-track">
+            <div class="sc-bar-conv" style="width:100%;">$35.6M annual cooling cost</div>
+            <div class="sc-bar-apex" style="width:12%;">$4.16M</div>
+          </div>
+          <div style="text-align:right;"><div class="sc-label" style="color:var(--green);">APEX</div><div style="font-family:var(--mono);font-size:11px;color:var(--green);">~$4.16M/yr cost</div></div>
+        </div>
+      </div>
+
+    </div><!-- /scale-panels -->
+
+    <!-- CTA after scale section -->
+    <div style="max-width:700px;margin:48px auto 0;text-align:center;padding:32px;background:rgba(13,27,50,0.6);border:1px solid rgba(62,207,130,0.2);border-radius:10px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,4vw,44px);line-height:0.95;color:var(--white);margin-bottom:10px;">Ready to Stop Paying<br><span style="color:var(--green);">Millions for Cooling Overhead?</span></div>
+      <p style="font-size:14px;color:var(--ltgray);line-height:1.6;margin-bottom:24px;font-weight:300;">Tell us your data center size and we will build a custom financial analysis showing your exact annual savings, payback timeline, and 10-year ROI with APEX.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="quote.html" class="btn-red">⚡ Request Financial Analysis</a>
+        <a href="roi.html" class="btn-ghost">See Full ROI Page →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><em>APEX</em> COOLING TECHNOLOGIES</div>
+  <div class="footer-info">
+    APEX Cooling Technologies, LLC · Austin, Texas · EIN 41-5260850<br>
+    Patent Pending · U.S. App. No. 64/055,155 · Filed May 1, 2026
+  </div>
+</footer>
+
+<script>
+function showScale(n) {
+  document.querySelectorAll('.scale-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.scale-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('scale-' + n).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

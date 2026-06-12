@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX — The Financial Case</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0A1628;--navy2:#0D2B55;--red:#CC1100;--orange:#FF4D00;
+  --green:#3ECF82;--dkgreen:#0A7A3E;--ltgreen:#E8F5EE;
+  --blue:#5BA8E8;--ice:#A8D4F5;--ltblue:#E8F0FA;
+  --gold:#FFD600;--tan:#C8A86A;
+  --white:#F4F8FF;--gray:#8A9BB0;--ltgray:#A8BCCF;
+  --dkgray:#2A3A4A;--yellow:#FFD600;
+  --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--navy);font-family:'Barlow',sans-serif;color:var(--white);overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--navy);}
+::-webkit-scrollbar-thumb{background:var(--green);}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,14,26,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(62,207,130,0.2);padding:0 48px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-heart{width:32px;height:32px;}
+.nav-brand{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--white);}
+.nav-brand span{color:var(--red);}
+.nav-links{display:flex;align-items:center;gap:24px;}
+.nav-links a{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-cta{background:var(--green)!important;color:var(--navy)!important;padding:8px 20px;border-radius:3px;font-weight:700;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 48px 80px;position:relative;overflow:hidden;text-align:center;}
+
+.hero-grid{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(62,207,130,0.02) 60px,rgba(62,207,130,0.02) 61px),repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(62,207,130,0.02) 60px,rgba(62,207,130,0.02) 61px);}
+.hero-glow{position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(62,207,130,0.06) 0%,transparent 65%);top:-150px;left:50%;transform:translateX(-50%);animation:pulse 6s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:0.5;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.06)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+.hero-content{position:relative;z-index:2;max-width:1000px;width:100%;}
+
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(62,207,130,0.1);border:1px solid rgba(62,207,130,0.3);border-radius:3px;padding:5px 16px;margin-bottom:24px;animation:fadeUp 0.8s ease both;}
+.hero-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 2s ease-in-out infinite;}
+.hero-badge span{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--green);}
+
+.hero-headline{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,8vw,96px);line-height:0.9;letter-spacing:2px;margin-bottom:16px;animation:fadeUp 0.8s ease 0.1s both;}
+.hero-headline .green{color:var(--green);}
+.hero-headline .gold{color:var(--gold);}
+
+.hero-sub{font-size:clamp(15px,2vw,19px);font-weight:300;color:var(--ice);max-width:700px;margin:0 auto 48px;line-height:1.65;animation:fadeUp 0.8s ease 0.2s both;}
+
+/* ── BIG NUMBER STRIP ── */
+.big-number-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid rgba(62,207,130,0.15);border-radius:8px;overflow:hidden;max-width:900px;margin:0 auto;animation:fadeUp 0.8s ease 0.3s both;}
+.big-num{padding:24px 16px;text-align:center;border-right:1px solid rgba(62,207,130,0.1);}
+.big-num:last-child{border-right:none;}
+.big-num-val{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,46px);line-height:1;margin-bottom:4px;}
+.big-num-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray);}
+
+/* ── SECTIONS ── */
+section{padding:100px 48px;display:flex;flex-direction:column;align-items:center;position:relative;}
+.section-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--green);text-align:center;margin-bottom:10px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,54px);line-height:1;text-align:center;margin-bottom:12px;}
+.section-sub{font-size:16px;font-weight:300;color:var(--ice);text-align:center;max-width:640px;margin:0 auto 60px;line-height:1.7;}
+
+/* ── COMPARISON TABLE ── */
+.comparison-wrapper{width:100%;max-width:1100px;overflow-x:auto;}
+.comparison-table{width:100%;border-collapse:collapse;font-size:14px;}
+.comparison-table th{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 20px;border-bottom:2px solid rgba(168,212,245,0.1);}
+.comparison-table td{padding:14px 20px;border-bottom:1px solid rgba(168,212,245,0.06);}
+.comparison-table tr:hover td{background:rgba(168,212,245,0.02);}
+.col-item{color:var(--ltgray);font-weight:500;}
+.col-conv{color:var(--gray);text-align:right;font-family:var(--mono);font-size:12px;}
+.col-apex{color:var(--green);text-align:right;font-weight:700;font-family:var(--mono);font-size:12px;}
+.col-save{color:var(--gold);text-align:right;font-weight:700;font-family:var(--mono);font-size:13px;}
+.total-row td{font-weight:700;color:var(--white);border-top:2px solid rgba(168,212,245,0.15);background:rgba(62,207,130,0.05)!important;font-size:15px;}
+.total-row .col-save{font-size:22px;color:var(--green);}
+.th-conv{color:var(--gray);text-align:right;}
+.th-apex{color:var(--green);text-align:right;}
+.th-save{color:var(--gold);text-align:right;}
+
+/* ── ROI CARDS ── */
+.roi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1100px;width:100%;}
+.roi-card{background:rgba(13,27,50,0.6);border:1px solid rgba(168,212,245,0.08);border-radius:12px;padding:28px;text-align:center;position:relative;overflow:hidden;transition:transform 0.3s,border-color 0.3s;}
+.roi-card:hover{transform:translateY(-4px);border-color:rgba(62,207,130,0.25);}
+.roi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.roi-card.c1::before{background:var(--green);}
+.roi-card.c2::before{background:var(--gold);}
+.roi-card.c3::before{background:var(--blue);}
+.roi-icon{font-size:32px;margin-bottom:14px;display:block;}
+.roi-val{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,48px);line-height:1;margin-bottom:6px;}
+.c1 .roi-val{color:var(--green);}
+.c2 .roi-val{color:var(--gold);}
+.c3 .roi-val{color:var(--blue);}
+.roi-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--white);margin-bottom:8px;}
+.roi-desc{font-size:12px;color:var(--gray);line-height:1.6;}
+
+/* ── PUE SECTION ── */
+.pue-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:1000px;width:100%;align-items:center;}
+.pue-visual{background:rgba(13,27,50,0.6);border:1px solid rgba(168,212,245,0.08);border-radius:12px;padding:32px;}
+.pue-bar-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;display:flex;justify-content:space-between;}
+.pue-bar-track{background:rgba(168,212,245,0.08);border-radius:4px;height:32px;margin-bottom:20px;overflow:hidden;position:relative;}
+.pue-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:12px;font-family:'Bebas Neue',sans-serif;font-size:18px;transition:width 1s ease;}
+.pue-bar-fill.conv{background:linear-gradient(90deg,rgba(204,17,0,0.6),rgba(204,17,0,0.3));}
+.pue-bar-fill.apex{background:linear-gradient(90deg,rgba(62,207,130,0.7),rgba(62,207,130,0.4));}
+
+/* ── PAYBACK TIMELINE ── */
+.payback-timeline{max-width:900px;width:100%;}
+.payback-header{display:grid;grid-template-columns:120px 1fr;gap:16px;margin-bottom:8px;}
+.payback-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);}
+.payback-row{display:grid;grid-template-columns:120px 1fr;gap:16px;margin-bottom:8px;align-items:center;}
+.payback-time{font-family:'Bebas Neue',sans-serif;font-size:20px;text-align:right;line-height:1;}
+.payback-track{background:rgba(168,212,245,0.06);border-radius:4px;height:36px;overflow:hidden;position:relative;}
+.payback-fill{height:100%;border-radius:4px;display:flex;align-items:center;gap:10px;padding:0 16px;}
+.payback-fill-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:white;}
+.payback-fill-amount{font-family:var(--mono);font-size:11px;}
+
+/* ── VS WATER SECTION ── */
+.water-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:900px;width:100%;border-radius:12px;overflow:hidden;border:1px solid rgba(168,212,245,0.1);}
+.water-col{padding:32px;}
+.water-col.conv{background:rgba(204,17,0,0.06);border-right:1px solid rgba(168,212,245,0.08);}
+.water-col.apex-col{background:rgba(62,207,130,0.06);}
+.water-col-header{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;}
+.conv .water-col-header{color:var(--red);}
+.apex-col .water-col-header{color:var(--green);}
+.water-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,60px);line-height:1;margin-bottom:8px;}
+.conv .water-big{color:var(--gold);}
+.apex-col .water-big{color:var(--green);}
+.water-sub{font-size:12px;color:var(--gray);line-height:1.6;margin-bottom:16px;}
+.water-item{font-size:12px;color:var(--ltgray);display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;line-height:1.5;}
+.conv .water-item::before{content:'✗';color:var(--red);flex-shrink:0;}
+.apex-col .water-item::before{content:'✓';color:var(--green);flex-shrink:0;}
+
+/* ── BOTTOM CTA ── */
+.cta-section{background:#060E1A;position:relative;}
+.cta-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.cta-box{max-width:800px;text-align:center;}
+.cta-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,5vw,56px);line-height:1;margin-bottom:16px;}
+.cta-title span{color:var(--green);}
+.cta-sub{font-size:16px;color:var(--ice);line-height:1.65;margin-bottom:40px;font-weight:300;}
+.cta-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.btn-green{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--navy);background:var(--green);padding:14px 28px;border-radius:3px;text-decoration:none;transition:all 0.2s;}
+.btn-green:hover{background:#2AB56A;transform:translateY(-2px);}
+.btn-outline{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ice);background:transparent;border:1px solid rgba(168,212,245,0.25);padding:14px 28px;border-radius:3px;text-decoration:none;transition:all 0.2s;}
+.btn-outline:hover{border-color:var(--ice);color:var(--white);}
+
+/* ── FOOTER ── */
+footer{background:#040A12;border-top:1px solid rgba(168,212,245,0.06);padding:32px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;}
+.footer-logo span{color:var(--red);}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--white);}
+.footer-info{font-size:11px;color:var(--gray);text-align:right;line-height:1.8;}
+
+/* ── PRINT ── */
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  nav{position:relative!important;background:#060E1A!important;}
+  body{background:#0A1628!important;}
+  .hero{min-height:auto!important;padding:60px 48px!important;break-after:page;}
+  section{padding:60px 48px!important;}
+  .roi-card,.water-col{break-inside:avoid!important;}
+}
+
+@media(max-width:900px){
+  nav{padding:0 24px;}
+  .hero{padding:80px 24px 60px;}
+  section{padding:60px 24px;}
+  .big-number-strip{grid-template-columns:1fr 1fr;}
+  .roi-grid{grid-template-columns:1fr;}
+  .pue-grid{grid-template-columns:1fr;}
+  .water-grid{grid-template-columns:1fr;}
+  footer{padding:24px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(4,10,18,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(204,17,0,0.2);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#F4F8FF;"><span style="color:#CC1100;">APEX</span> COOLING</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+    <a href="index.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Home</a>
+    <a href="about.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">About</a>
+    <a href="solution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Solution</a>
+    <a href="why-apex.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Why APEX</a>
+    <a href="roi.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">ROI</a>
+    <a href="evolution.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Evolution</a>
+    <a href="industry-analysis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Industry</a>
+    <a href="crisis.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Crisis</a>
+    <a href="deployment-cover.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Deployment</a>
+    <a href="news.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">News</a>
+    <a href="contact.html" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB0;text-decoration:none;">Contact</a>
+    <a href="https://apexmechpod.com" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#F4F8FF;background:#CC1100;padding:8px 18px;border-radius:3px;text-decoration:none;">MechPod →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><div class="hero-badge-dot"></div><span>Financial Analysis · 100 MW AI Data Center · 2026</span></div>
+    <h1 class="hero-headline">
+      Your Cooling System<br>
+      Is Costing You<br>
+      <span class="gold">$28.7 Million</span><br>
+      <span class="green">Every Year.</span>
+    </h1>
+    <p class="hero-sub">That is what a conventional 100 MW AI data center spends annually on cooling — electricity waste, water consumption, chemical treatment, and maintenance. APEX eliminates virtually all of it. The payback period is measured in months, not years.</p>
+
+    <div class="big-number-strip">
+      <div class="big-num" style="background:rgba(62,207,130,0.06);">
+        <div class="big-num-val" style="color:var(--green);">$28.7M</div>
+        <div class="big-num-lbl">Annual Savings<br>at 100 MW</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--gold);">&lt;3 Mo</div>
+        <div class="big-num-lbl">Payback Period<br>on Electricity Alone</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--blue);">1.04</div>
+        <div class="big-num-lbl">Target PUE<br>vs 1.5 Today</div>
+      </div>
+      <div class="big-num" style="background:rgba(62,207,130,0.06);">
+        <div class="big-num-val" style="color:var(--green);">ZERO</div>
+        <div class="big-num-lbl">Water Gallons<br>Consumed — Ever</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAVINGS BREAKDOWN -->
+<section style="background:#060E1A;">
+  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);"></div>
+  <p class="section-eyebrow">The Full Financial Picture</p>
+  <h2 class="section-title">Annual Cost Comparison — 100 MW Facility</h2>
+  <p class="section-sub">Every line item. Every dollar. Based on published industry data for a 100 megawatt AI data center operating in Texas at $0.07 per kWh.</p>
+
+  <div class="comparison-wrapper">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th style="text-align:left;color:var(--ltgray);">Cost Category</th>
+          <th class="th-conv">Conventional System</th>
+          <th class="th-apex">APEX MechPod</th>
+          <th class="th-save">Annual Savings</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-item">
+            <div style="font-weight:700;margin-bottom:3px;">Electricity — PUE Gap</div>
+            <div style="font-size:11px;color:var(--gray);">100 MW at PUE 1.5 wastes 50MW on cooling overhead vs APEX at PUE 1.06</div>
+          </td>
+          <td class="col-conv">~$30.7M/yr<br><span style="font-size:10px;color:var(--gray);">PUE 1.5 — 50MW overhead</span></td>
+          <td class="col-apex">~$3.7M/yr<br><span style="font-size:10px;color:var(--green);">PUE 1.06 — 6MW overhead</span></td>
+          <td class="col-save" style="color:var(--green);font-size:18px;">~$27.0M</td>
+        </tr>
+        <tr>
+          <td class="col-item">
+            <div style="font-weight:700;margin-bottom:3px;">Water Consumption</div>
+            <div style="font-size:11px;color:var(--gray);">530,000 gal/day × $0.004/gal × 365 days</div>
+          </td>
+          <td class="col-conv">~$775K/yr<br><span style="font-size:10px;color:var(--gray);">193.5M gal/yr</span></td>
+          <td class="col-apex">$0<br><span style="font-size:10px;color:var(--green);">Zero gallons — always</span></td>
+          <td class="col-save">~$775K</td>
+        </tr>
+        <tr>
+          <td class="col-item">
+            <div style="font-weight:700;margin-bottom:3px;">Water Treatment Chemicals</div>
+            <div style="font-size:11px;color:var(--gray);">Scale inhibitors, biocides, pH control, Legionella program</div>
+          </td>
+          <td class="col-conv">~$200K/yr</td>
+          <td class="col-apex">$0</td>
+          <td class="col-save">~$200K</td>
+        </tr>
+        <tr>
+          <td class="col-item">
+            <div style="font-weight:700;margin-bottom:3px;">Cooling Tower Maintenance</div>
+            <div style="font-size:11px;color:var(--gray);">Fill media, drift eliminators, basin cleaning, inspections</div>
+          </td>
+          <td class="col-conv">~$500K/yr</td>
+          <td class="col-apex">~$100K/yr<br><span style="font-size:10px;color:var(--green);">Minimal — no water system</span></td>
+          <td class="col-save">~$400K</td>
+        </tr>
+        <tr>
+          <td class="col-item">
+            <div style="font-weight:700;margin-bottom:3px;">HFC Refrigerant Cycling</div>
+            <div style="font-size:11px;color:var(--gray);">Recharge, regulatory compliance, AIM Act phase-out costs</div>
+          </td>
+          <td class="col-conv">~$300K/yr<br><span style="font-size:10px;color:var(--gray);">Rising as HFCs phase out</span></td>
+          <td class="col-apex">$0<br><span style="font-size:10px;color:var(--green);">Ammonia — never regulated out</span></td>
+          <td class="col-save">~$300K</td>
+        </tr>
+        <tr>
+          <td class="col-item">
+            <div style="font-weight:700;margin-bottom:3px;">Wastewater / Blowdown Disposal</div>
+            <div style="font-size:11px;color:var(--gray);">Cooling tower blowdown treatment and disposal fees</div>
+          </td>
+          <td class="col-conv">~$50K/yr</td>
+          <td class="col-apex">$0</td>
+          <td class="col-save">~$50K</td>
+        </tr>
+        <tr class="total-row">
+          <td class="col-item">TOTAL ANNUAL COST DIFFERENCE — 100 MW FACILITY</td>
+          <td class="col-conv" style="color:var(--gold);font-size:16px;">~$32.5M/yr</td>
+          <td class="col-apex" style="font-size:16px;">~$3.8M/yr</td>
+          <td class="col-save">~$28.7M/yr</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:16px;font-size:11px;color:var(--gray);font-style:italic;text-align:center;max-width:700px;">
+    Assumptions: 100 MW IT load, Texas grid at $0.07/kWh, water at $0.004/gal, 530,000 gal/day cooling tower consumption at 100 MW, PUE 1.5 conventional vs PUE 1.06 APEX target. Actual results vary by facility and operating conditions.
+  </div>
+</section>
+
+<!-- ROI CARDS -->
+<section style="background:var(--navy);">
+  <p class="section-eyebrow">Return on Investment</p>
+  <h2 class="section-title">The Numbers That Matter to Investors</h2>
+  <p class="section-sub">Three ways to frame the APEX financial case depending on your audience.</p>
+
+  <div class="roi-grid">
+    <div class="roi-card c1">
+      <span class="roi-icon">⚡</span>
+      <div class="roi-val">&lt; 3 Months</div>
+      <div class="roi-title">Electricity Payback Period</div>
+      <div class="roi-desc">If a 100 MW APEX system costs $5M installed — electricity savings alone of $27M per year pay back the entire investment in under 3 months. Every month after that is pure operating savings flowing to the bottom line.</div>
+    </div>
+    <div class="roi-card c2">
+      <span class="roi-icon">💰</span>
+      <div class="roi-val">$287M</div>
+      <div class="roi-title">10-Year Net Savings</div>
+      <div class="roi-desc">Over a 10-year operating life a single 100 MW APEX-cooled facility saves approximately $287 million in combined electricity, water, chemical, maintenance, and refrigerant costs versus conventional cooling — before accounting for any regulatory cost increases.</div>
+    </div>
+    <div class="roi-card c3">
+      <span class="roi-icon">📈</span>
+      <div class="roi-val">573x</div>
+      <div class="roi-title">10-Year ROI Multiple</div>
+      <div class="roi-desc">A $5M APEX system investment returns $287M in savings over 10 years — a 5,730% return on the cooling infrastructure investment. No other cooling technology on the market offers this combination of capital efficiency and operating savings.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PUE EXPLAINED -->
+<section style="background:#060E1A;">
+  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,212,245,0.2),transparent);"></div>
+  <p class="section-eyebrow">Understanding PUE</p>
+  <h2 class="section-title">The Efficiency Gap That Costs Millions</h2>
+  <p class="section-sub">PUE — Power Usage Effectiveness — measures how much total power goes to computing vs cooling overhead. Every point above 1.0 is money wasted on cooling, not computing.</p>
+
+  <div class="pue-grid">
+    <div class="pue-visual">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:20px;">PUE Comparison — 100 MW IT Load</div>
+
+      <div class="pue-bar-label"><span style="color:var(--gray);">Legacy Air Cooling</span><span style="color:var(--gray);">PUE 1.8</span></div>
+      <div class="pue-bar-track">
+        <div class="pue-bar-fill conv" style="width:90%;color:white;">80MW wasted on cooling</div>
+      </div>
+
+      <div class="pue-bar-label"><span style="color:var(--gray);">Industry Average</span><span style="color:var(--gray);">PUE 1.5</span></div>
+      <div class="pue-bar-track">
+        <div class="pue-bar-fill conv" style="width:65%;color:white;">50MW wasted on cooling</div>
+      </div>
+
+      <div class="pue-bar-label"><span style="color:var(--gray);">Adiabatic / Hybrid</span><span style="color:var(--gray);">PUE 1.3</span></div>
+      <div class="pue-bar-track">
+        <div class="pue-bar-fill conv" style="width:45%;color:white;">30MW wasted</div>
+      </div>
+
+      <div class="pue-bar-label"><span style="color:var(--green);font-weight:700;">APEX MechPod Target</span><span style="color:var(--green);font-weight:700;">PUE 1.06</span></div>
+      <div class="pue-bar-track">
+        <div class="pue-bar-fill apex" style="width:10%;min-width:80px;color:white;font-size:13px;">6MW</div>
+      </div>
+
+      <div style="margin-top:16px;padding:12px 16px;background:rgba(62,207,130,0.08);border:1px solid rgba(62,207,130,0.2);border-radius:6px;font-size:12px;color:var(--ltgray);line-height:1.6;">
+        At $0.07/kWh — every MW of PUE waste costs <strong style="color:var(--white);">$613,000 per year</strong> in wasted electricity. The gap between PUE 1.5 and PUE 1.06 is 44MW — costing <strong style="color:var(--gold);">$27 million per year</strong> at 100MW scale.
+      </div>
+    </div>
+
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,4vw,40px);line-height:1;margin-bottom:16px;">Every MW of PUE Overhead Costs <span style="color:var(--gold);">$613,000 Per Year.</span></div>
+      <p style="font-size:14px;color:var(--ice);line-height:1.7;margin-bottom:20px;font-weight:300;">Conventional cooling systems waste between 30% and 80% of their total power draw on cooling overhead — power that never reaches a GPU, never processes a training job, never generates revenue.</p>
+      <p style="font-size:14px;color:var(--ice);line-height:1.7;margin-bottom:20px;font-weight:300;">APEX Predictive Thermal Conditioning pre-cools the system before workloads ramp — meaning the refrigeration circuit never overworks to catch up. The result is a PUE of 1.04-1.08 — meaning 94-96 cents of every electricity dollar goes directly to compute.</p>
+      <div style="padding:20px;background:rgba(13,27,50,0.6);border:1px solid rgba(168,212,245,0.08);border-radius:8px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:10px;">At 100 MW — The Annual Electricity Math</div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--ltgray);line-height:2;">
+          Conventional PUE 1.5 = 150 MW total draw<br>
+          APEX PUE 1.06 = 106 MW total draw<br>
+          Difference = <span style="color:var(--gold);">44 MW saved</span><br>
+          44 MW × 8,760 hrs × $0.07/kWh = <span style="color:var(--green);font-weight:700;">$26.97M/yr</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WATER COST SECTION -->
+<section style="background:var(--navy);">
+  <p class="section-eyebrow">The Water Cost Nobody Talks About</p>
+  <h2 class="section-title">530,000 Gallons Per Day.<br>Every Day. Forever.</h2>
+  <p class="section-sub">That is what a conventional cooling tower consumes at 100 MW scale. The cost is not just the water bill. It is treatment, disposal, maintenance, regulatory risk, and the growing cost of water scarcity.</p>
+
+  <div class="water-grid">
+    <div class="water-col conv">
+      <div class="water-col-header">⚠ Conventional Cooling — Water Costs</div>
+      <div class="water-big">530K</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--gray);margin-bottom:12px;letter-spacing:1px;">GALLONS PER DAY — 100 MW</div>
+      <div class="water-sub">At current Texas water rates — before scarcity pricing increases expected by 2030.</div>
+      <div class="water-item">$775,000/yr in water consumption costs</div>
+      <div class="water-item">$200,000/yr in chemical treatment</div>
+      <div class="water-item">$50,000/yr in blowdown disposal</div>
+      <div class="water-item">Legionella monitoring and compliance</div>
+      <div class="water-item">Stage 3 drought restriction exposure</div>
+      <div class="water-item">Water price inflation — 6.6% projected Texas increase by 2030</div>
+      <div class="water-item">193.5 million gallons consumed per year</div>
+      <div style="margin-top:16px;padding:12px;background:rgba(204,17,0,0.08);border:1px solid rgba(204,17,0,0.2);border-radius:6px;font-size:11px;color:var(--ltgray);line-height:1.6;">Total 10-year water-related cost at 100 MW: <strong style="color:var(--gold);">~$10.25M</strong> — before regulatory cost increases</div>
+    </div>
+    <div class="water-col apex-col">
+      <div class="water-col-header">✅ APEX MechPod — Water Costs</div>
+      <div class="water-big">ZERO</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--green);margin-bottom:12px;letter-spacing:1px;">GALLONS PER DAY — ALWAYS</div>
+      <div class="water-sub">Dry air-cooled ammonia condensers reject heat to atmosphere at any temperature — including 113°F Texas summer peak.</div>
+      <div class="water-item">$0 water consumption — always</div>
+      <div class="water-item">$0 chemical treatment — no water system</div>
+      <div class="water-item">$0 blowdown disposal — nothing to dispose</div>
+      <div class="water-item">No Legionella risk — no water circuit</div>
+      <div class="water-item">Zero drought restriction exposure — ever</div>
+      <div class="water-item">No water price inflation exposure — ever</div>
+      <div class="water-item">Zero gallons consumed per year — forever</div>
+      <div style="margin-top:16px;padding:12px;background:rgba(62,207,130,0.08);border:1px solid rgba(62,207,130,0.2);border-radius:6px;font-size:11px;color:var(--ltgray);line-height:1.6;">Total 10-year water-related cost at 100 MW: <strong style="color:var(--green);">$0</strong> — regardless of water price or regulatory changes</div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYBACK TIMELINE -->
+<section style="background:#060E1A;">
+  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);"></div>
+  <p class="section-eyebrow">Payback Timeline</p>
+  <h2 class="section-title">How Fast Does APEX Pay For Itself?</h2>
+  <p class="section-sub">Assuming a $5M APEX MechPod system for a 100 MW facility. Payback calculated on total annual savings of $28.7M.</p>
+
+  <div class="payback-timeline">
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;margin-bottom:8px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);text-align:right;">Timeline</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);">Cumulative Savings vs $5M Investment</div>
+    </div>
+
+    <!-- Month 1 -->
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;margin-bottom:10px;align-items:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ltgray);text-align:right;line-height:1;">Month 1</div>
+      <div style="background:rgba(168,212,245,0.06);border-radius:4px;height:36px;overflow:hidden;">
+        <div style="width:8%;height:100%;background:linear-gradient(90deg,rgba(62,207,130,0.5),rgba(62,207,130,0.3));display:flex;align-items:center;padding:0 12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:white;min-width:100px;">$2.39M saved</div>
+      </div>
+    </div>
+
+    <!-- Month 2 -->
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;margin-bottom:10px;align-items:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ltgray);text-align:right;line-height:1;">Month 2</div>
+      <div style="background:rgba(168,212,245,0.06);border-radius:4px;height:36px;overflow:hidden;">
+        <div style="width:16%;height:100%;background:linear-gradient(90deg,rgba(62,207,130,0.5),rgba(62,207,130,0.3));display:flex;align-items:center;padding:0 12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:white;min-width:130px;">$4.78M saved</div>
+      </div>
+    </div>
+
+    <!-- Month 3 — PAYBACK -->
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;margin-bottom:10px;align-items:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);text-align:right;line-height:1;">Month 3</div>
+      <div style="background:rgba(168,212,245,0.06);border-radius:4px;height:36px;overflow:hidden;position:relative;">
+        <div style="width:25%;height:100%;background:linear-gradient(90deg,rgba(62,207,130,0.8),rgba(62,207,130,0.5));display:flex;align-items:center;padding:0 12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:white;min-width:180px;">$7.17M — FULLY PAID BACK ✅</div>
+      </div>
+    </div>
+
+    <!-- Year 1 -->
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;margin-bottom:10px;align-items:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ltgray);text-align:right;line-height:1;">Year 1</div>
+      <div style="background:rgba(168,212,245,0.06);border-radius:4px;height:36px;overflow:hidden;">
+        <div style="width:50%;height:100%;background:linear-gradient(90deg,rgba(255,214,0,0.5),rgba(255,214,0,0.3));display:flex;align-items:center;padding:0 12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:white;min-width:160px;">$28.7M net savings</div>
+      </div>
+    </div>
+
+    <!-- Year 5 -->
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;margin-bottom:10px;align-items:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ltgray);text-align:right;line-height:1;">Year 5</div>
+      <div style="background:rgba(168,212,245,0.06);border-radius:4px;height:36px;overflow:hidden;">
+        <div style="width:75%;height:100%;background:linear-gradient(90deg,rgba(255,214,0,0.6),rgba(255,214,0,0.3));display:flex;align-items:center;padding:0 12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:white;min-width:160px;">$143.5M cumulative savings</div>
+      </div>
+    </div>
+
+    <!-- Year 10 -->
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;margin-bottom:10px;align-items:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);text-align:right;line-height:1;">Year 10</div>
+      <div style="background:rgba(168,212,245,0.06);border-radius:4px;height:36px;overflow:hidden;">
+        <div style="width:100%;height:100%;background:linear-gradient(90deg,rgba(255,214,0,0.7),rgba(255,214,0,0.4));display:flex;align-items:center;padding:0 12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:white;">$287M cumulative — 5,730% ROI on $5M investment</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;font-size:11px;color:var(--gray);font-style:italic;text-align:center;">Based on $28.7M annual savings at 100 MW. $5M illustrative system cost. </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-box">
+    <div class="cta-title">Ready to Stop Paying<br><span>$28.7 Million Per Year</span><br>For Cooling Overhead?</div>
+    <p class="cta-sub">Every month you operate with conventional cooling is another $2.4 million in unnecessary costs. APEX eliminates virtually all of it — with zero water, a PUE target of 1.04, and a payback period measured in months not years.</p>
+    <div class="cta-buttons">
+      <a href="https://apexmechpod.com/quote.html" class="btn-green">⚡ Request a Financial Analysis</a>
+      <a href="https://apexmechpod.com" class="btn-outline">See the MechPod →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>APEX</span> COOLING TECHNOLOGIES</div>
+  <div class="footer-links">
+    <a href="https://apexcoolingtech.com">Company</a>
+    <a href="https://apexmechpod.com">MechPod</a>
+    <a href="https://apexmechpod.com/quote.html">Get a Quote</a>
+  </div>
+  <div class="footer-info">
+    APEX Cooling Technologies, LLC · Austin, Texas<br>
+    Patent Pending · EIN: 41-5260850
+  </div>
+</footer>
+
+</body>
+</html>
